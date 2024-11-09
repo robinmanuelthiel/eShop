@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -6,30 +6,19 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace eShop.ServiceDefaults;
 
 internal static class OpenApiOptionsExtensions
 {
-    public static OpenApiOptions ApplyApiVersionInfo(this OpenApiOptions options, string title, string description)
+    public static SwaggerGenOptions ApplyApiVersionInfo(this SwaggerGenOptions options, string title, string description)
     {
-        options.AddDocumentTransformer((document, context, cancellationToken) =>
-        {
-            var versionedDescriptionProvider = context.ApplicationServices.GetService<IApiVersionDescriptionProvider>();
-            var apiDescription = versionedDescriptionProvider?.ApiVersionDescriptions
-                .SingleOrDefault(description => description.GroupName == context.DocumentName);
-            if (apiDescription is null)
-            {
-                return Task.CompletedTask;
-            }
-            document.Info.Version = apiDescription.ApiVersion.ToString();
-            document.Info.Title = title;
-            document.Info.Description = BuildDescription(apiDescription, description);
-            return Task.CompletedTask;
-        });
+        options.DocumentFilter<ApiVersionDocumentFilter>(title, description);
         return options;
     }
 
@@ -100,52 +89,21 @@ internal static class OpenApiOptionsExtensions
         return text.ToString();
     }
 
-    public static OpenApiOptions ApplySecuritySchemeDefinitions(this OpenApiOptions options)
+    public static SwaggerGenOptions ApplySecuritySchemeDefinitions(this SwaggerGenOptions options)
     {
-        options.AddDocumentTransformer<SecuritySchemeDefinitionsTransformer>();
+        options.DocumentFilter<SecuritySchemeDocumentFilter>();
         return options;
     }
 
-    public static OpenApiOptions ApplyAuthorizationChecks(this OpenApiOptions options, string[] scopes)
+    public static SwaggerGenOptions ApplyAuthorizationChecks(this SwaggerGenOptions options, string[] scopes)
     {
-        options.AddOperationTransformer((operation, context, cancellationToken) =>
-        {
-            var metadata = context.Description.ActionDescriptor.EndpointMetadata;
-
-            if (!metadata.OfType<IAuthorizeData>().Any())
-            {
-                return Task.CompletedTask;
-            }
-
-            operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
-            operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
-
-            var oAuthScheme = new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
-            };
-
-            operation.Security = new List<OpenApiSecurityRequirement>
-            {
-                new()
-                {
-                    [oAuthScheme] = scopes
-                }
-            };
-
-            return Task.CompletedTask;
-        });
+        options.OperationFilter<AuthorizationOperationFilter>(scopes);
         return options;
     }
 
-    public static OpenApiOptions ApplyOperationDeprecatedStatus(this OpenApiOptions options)
+    public static SwaggerGenOptions ApplyOperationDeprecatedStatus(this SwaggerGenOptions options)
     {
-        options.AddOperationTransformer((operation, context, cancellationToken) =>
-        {
-            var apiDescription = context.Description;
-            operation.Deprecated |= apiDescription.IsDeprecated();
-            return Task.CompletedTask;
-        });
+        options.OperationFilter<DeprecatedOperationFilter>();
         return options;
     }
 
@@ -161,14 +119,48 @@ internal static class OpenApiOptionsExtensions
         };
     }
 
-    private class SecuritySchemeDefinitionsTransformer(IConfiguration configuration) : IOpenApiDocumentTransformer
+    private class ApiVersionDocumentFilter : IDocumentFilter
     {
-        public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
+        private readonly string _title;
+        private readonly string _description;
+        private readonly IApiVersionDescriptionProvider _provider;
+
+        public ApiVersionDocumentFilter(string title, string description, IApiVersionDescriptionProvider provider)
         {
-            var identitySection = configuration.GetSection("Identity");
+            _title = title;
+            _description = description;
+            _provider = provider;
+        }
+
+        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+        {
+            var apiDescription = _provider.ApiVersionDescriptions
+                .SingleOrDefault(description => description.GroupName == context.DocumentName);
+            if (apiDescription is null)
+            {
+                return;
+            }
+            swaggerDoc.Info.Version = apiDescription.ApiVersion.ToString();
+            swaggerDoc.Info.Title = _title;
+            swaggerDoc.Info.Description = BuildDescription(apiDescription, _description);
+        }
+    }
+
+    private class SecuritySchemeDocumentFilter : IDocumentFilter
+    {
+        private readonly IConfiguration _configuration;
+
+        public SecuritySchemeDocumentFilter(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
+        {
+            var identitySection = _configuration.GetSection("Identity");
             if (!identitySection.Exists())
             {
-                return Task.CompletedTask;
+                return;
             }
 
             var identityUrlExternal = identitySection.GetRequiredValue("Url");
@@ -187,9 +179,52 @@ internal static class OpenApiOptionsExtensions
                     }
                 }
             };
-            document.Components ??= new();
-            document.Components.SecuritySchemes.Add("oauth2", securityScheme);
-            return Task.CompletedTask;
+            swaggerDoc.Components ??= new();
+            swaggerDoc.Components.SecuritySchemes.Add("oauth2", securityScheme);
+        }
+    }
+
+    private class AuthorizationOperationFilter : IOperationFilter
+    {
+        private readonly string[] _scopes;
+
+        public AuthorizationOperationFilter(string[] scopes)
+        {
+            _scopes = scopes;
+        }
+
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        {
+            var metadata = context.ApiDescription.ActionDescriptor.EndpointMetadata;
+
+            if (!metadata.OfType<IAuthorizeData>().Any())
+            {
+                return;
+            }
+
+            operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
+            operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
+
+            var oAuthScheme = new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+            };
+
+            operation.Security = new List<OpenApiSecurityRequirement>
+            {
+                new()
+                {
+                    [oAuthScheme] = _scopes
+                }
+            };
+        }
+    }
+
+    private class DeprecatedOperationFilter : IOperationFilter
+    {
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        {
+            operation.Deprecated |= context.ApiDescription.IsDeprecated();
         }
     }
 }

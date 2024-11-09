@@ -1,6 +1,5 @@
-﻿@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.Extensions.AI
 @using eShop.WebApp.Chatbot
 @inject IJSRuntime JS
 @inject NavigationManager Nav
@@ -17,17 +16,14 @@
     <div class="chatbot-chat" @ref="chat">
         @if (chatState is not null)
         {
-            foreach (var message in chatState.Messages.Where(m => m.Role == ChatRole.Assistant || m.Role == ChatRole.User))
+            @foreach (var message in chatState.Messages)
             {
-                if (!string.IsNullOrEmpty(message.Text))
-                {
-                    <p @key="@message" class="message message-@message.Role">@MessageProcessor.AllowImages(message.Text)</p>
-                }
+                <p @key="@message" class="message">@message</p>
             }
         }
-        else if (missingConfiguration)
+        else
         {
-            <p class="message message-assistant"><strong>The chatbot is missing required configuration.</strong> Please set 'useOpenAI = true' in eShop.AppHost/Program.cs. You'll need an API key or an Azure Subscription to enable AI features.</p>
+            <p class="message">Chat functionality is temporarily unavailable during system upgrade.</p>
         }
 
         @if (thinking)
@@ -43,7 +39,6 @@
 </div>
 
 @code {
-    bool missingConfiguration;
     ChatState? chatState;
     ElementReference textbox;
     ElementReference chat;
@@ -53,16 +48,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var client = ServiceProvider.GetService<IChatClient>();
-        if (client is not null)
-        {
-            AuthenticationState auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-            chatState = new ChatState(CatalogService, BasketState, auth.User, ProductImages, LoggerFactory, client);
-        }
-        else
-        {
-            missingConfiguration = true;
-        }
+        AuthenticationState auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        chatState = new ChatState(CatalogService, BasketState, auth.User, ProductImages, LoggerFactory);
     }
 
     private async Task SendMessageAsync()

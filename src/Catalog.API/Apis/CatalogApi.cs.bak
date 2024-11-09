@@ -1,13 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Pgvector.EntityFrameworkCore;
-using eShop.Catalog.API.Infrastructure;
-using eShop.Catalog.API.Model;
-using eShop.Catalog.API.IntegrationEvents;
-using eShop.EventBus.Events;
-using eShop.Catalog.API.Services;
-using eShop.Catalog.API.IntegrationEvents.Events;
 
 namespace eShop.Catalog.API;
 
@@ -45,7 +38,8 @@ public static class CatalogApi
         [AsParameters] PaginationRequest paginationRequest,
         [FromServices] CatalogContext context,
         [FromServices] ICatalogAI catalogAI,
-        [FromServices] ILogger<CatalogItem> logger)
+        [FromServices] ILogger<CatalogItem> logger,
+        [FromServices] IIntegrationEventService eventService)
     {
         var pageSize = paginationRequest.PageSize;
         var pageIndex = paginationRequest.PageIndex;
@@ -117,11 +111,11 @@ public static class CatalogApi
     {
         var item = await context.CatalogItems.FindAsync(catalogItemId);
 
-
         if (item is null)
         {
             return TypedResults.NotFound();
         }
+
 
         var path = GetFullPath(environment.ContentRootPath, item.PictureFileName);
 
@@ -255,7 +249,7 @@ public static class CatalogApi
     public static async Task<Results<Created, NotFound<string>>> UpdateItem(
         [FromServices] CatalogContext context,
         [FromServices] ICatalogAI catalogAI,
-        [FromServices] ICatalogIntegrationEventService eventService,
+        [FromServices] IIntegrationEventService eventService,
         [FromBody] CatalogItem productToUpdate)
     {
         var catalogItem = await context.CatalogItems.SingleOrDefaultAsync(i => i.Id == productToUpdate.Id);

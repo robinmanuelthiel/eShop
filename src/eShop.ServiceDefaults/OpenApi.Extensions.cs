@@ -5,7 +5,13 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.SwaggerUI;
+using System;
+using System.Linq;
+using System.Reflection;
 
 namespace eShop.ServiceDefaults;
 
@@ -21,7 +27,12 @@ public static partial class Extensions
             return app;
         }
 
-        app.MapOpenApi();
+        app.UseSwagger();
+        app.UseSwaggerUI(options =>
+        {
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            options.RoutePrefix = string.Empty;
+        });
 
         if (app.Environment.IsDevelopment())
         {
@@ -30,7 +41,7 @@ public static partial class Extensions
                 // Disable default fonts to avoid download unnecessary fonts
                 options.DefaultFonts = false;
             });
-            app.MapGet("/", () => Results.Redirect("/scalar/v1")).ExcludeFromDescription();
+            app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
         }
 
         return app;
@@ -47,7 +58,6 @@ public static partial class Extensions
             ? identitySection.GetRequiredSection("Scopes").GetChildren().ToDictionary(p => p.Key, p => p.Value)
             : new Dictionary<string, string?>();
 
-
         if (!openApi.Exists())
         {
             return builder;
@@ -58,26 +68,66 @@ public static partial class Extensions
             // the default format will just be ApiVersion.ToString(); for example, 1.0.
             // this will format the version as "'v'major[.minor][-status]"
             var versioned = apiVersioning.AddApiExplorer(options => options.GroupNameFormat = "'v'VVV");
-            string[] versions = ["v1"];
-            foreach (var description in versions)
+
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(options =>
             {
-                builder.Services.AddOpenApi(description, options =>
+                options.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    options.ApplyApiVersionInfo(openApi.GetRequiredValue("Document:Title"), openApi.GetRequiredValue("Document:Description"));
-                    options.ApplyAuthorizationChecks([.. scopes.Keys]);
-                    options.ApplySecuritySchemeDefinitions();
-                    options.ApplyOperationDeprecatedStatus();
-                    // Clear out the default servers so we can fallback to
-                    // whatever ports have been allocated for the service by Aspire
-                    options.AddDocumentTransformer((document, context, cancellationToken) =>
-                    {
-                        document.Servers = [];
-                        return Task.CompletedTask;
-                    });
+                    Title = openApi.GetRequiredValue("Document:Title"),
+                    Description = openApi.GetRequiredValue("Document:Description"),
+                    Version = "v1"
                 });
-            }
+
+                if (identitySection.Exists())
+                {
+                    var authority = identitySection["Authority"];
+                    if (!string.IsNullOrEmpty(authority))
+                    {
+                        options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                        {
+                            Type = SecuritySchemeType.OAuth2,
+                            Flows = new OpenApiOAuthFlows
+                            {
+                                AuthorizationCode = new OpenApiOAuthFlow
+                                {
+                                    AuthorizationUrl = new Uri($"{authority}/connect/authorize"),
+                                    TokenUrl = new Uri($"{authority}/connect/token"),
+                                    Scopes = scopes.ToDictionary(s => s.Key, s => s.Value ?? string.Empty)
+                                }
+                            }
+                        });
+
+                        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                        {
+                            {
+                                new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
+                                },
+                                scopes.Keys.ToList()
+                            }
+                        });
+                    }
+                }
+
+                options.OperationFilter<DeprecatedOperationFilter>();
+            });
         }
 
         return builder;
+    }
+}
+
+public class DeprecatedOperationFilter : IOperationFilter
+{
+    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+    {
+        if (context.MethodInfo?.GetCustomAttributes(true)
+            .OfType<ObsoleteAttribute>()
+            .Any() == true)
+        {
+            operation.Deprecated = true;
+        }
     }
 }

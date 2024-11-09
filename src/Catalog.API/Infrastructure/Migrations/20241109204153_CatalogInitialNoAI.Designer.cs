@@ -4,27 +4,26 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using eShop.Catalog.API.Infrastructure;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Pgvector;
+using eShop.Catalog.API.Infrastructure;
 
 #nullable disable
 
 namespace eShop.Catalog.API.Infrastructure.Migrations
 {
     [DbContext(typeof(CatalogContext))]
-    [Migration("20231026091140_Outbox")]
-    partial class Outbox
+    [Migration("20241109204153_CatalogInitialNoAI")]
+    partial class CatalogInitialNoAI
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0-rtm.23512.13")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "vector");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("eShop.Catalog.API.Model.CatalogBrand", b =>
@@ -63,10 +62,11 @@ namespace eShop.Catalog.API.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Vector>("Embedding")
-                        .HasColumnType("vector(384)");
+                        .HasColumnType("vector");
 
                     b.Property<int>("MaxStockThreshold")
                         .HasColumnType("integer");
@@ -80,6 +80,7 @@ namespace eShop.Catalog.API.Infrastructure.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("PictureFileName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<decimal>("Price")

@@ -1,4 +1,4 @@
-﻿namespace eShop.Catalog.API.IntegrationEvents.EventHandling;
+namespace eShop.Catalog.API.IntegrationEvents.EventHandling;
 
 public class OrderStatusChangedToPaidIntegrationEventHandler(
     CatalogContext catalogContext,
@@ -13,6 +13,13 @@ public class OrderStatusChangedToPaidIntegrationEventHandler(
         foreach (var orderStockItem in @event.OrderStockItems)
         {
             var catalogItem = catalogContext.CatalogItems.Find(orderStockItem.ProductId);
+
+            if (catalogItem is null)
+            {
+                logger.LogWarning("Product {ProductId} not found while handling paid order {OrderId}",
+                    orderStockItem.ProductId, @event.OrderId);
+                continue;
+            }
 
             catalogItem.RemoveStock(orderStockItem.Units);
         }

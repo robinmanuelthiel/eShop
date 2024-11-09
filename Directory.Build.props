@@ -1,10 +1,9 @@
 <Project>
 
   <PropertyGroup>
-    <LangVersion>preview</LangVersion>
+    <LangVersion>latest</LangVersion>
     <WarnOnPackingNonPackableProject>false</WarnOnPackingNonPackableProject>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <ImplicitUsings>enable</ImplicitUsings>

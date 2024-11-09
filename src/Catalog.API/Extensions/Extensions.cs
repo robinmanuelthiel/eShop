@@ -1,6 +1,4 @@
 ﻿using eShop.Catalog.API.Services;
-using Microsoft.Extensions.AI;
-using OpenAI;
 
 public static class Extensions
 {
@@ -29,24 +27,7 @@ public static class Extensions
         builder.Services.AddOptions<CatalogOptions>()
             .BindConfiguration(nameof(CatalogOptions));
 
-        if (builder.Configuration["AI:Ollama:Endpoint"] is string ollamaEndpoint && !string.IsNullOrWhiteSpace(ollamaEndpoint))
-        {
-            builder.Services.AddEmbeddingGenerator<string, Embedding<float>>(b => b
-                .UseOpenTelemetry()
-                .UseLogging()
-                .Use(new OllamaEmbeddingGenerator(
-                    new Uri(ollamaEndpoint),
-                    builder.Configuration["AI:Ollama:EmbeddingModel"])));
-        }
-        else if (!string.IsNullOrWhiteSpace(builder.Configuration.GetConnectionString("openai")))
-        {
-            builder.AddOpenAIClientFromConfiguration("openai");
-            builder.Services.AddEmbeddingGenerator<string, Embedding<float>>(b => b
-                .UseOpenTelemetry()
-                .UseLogging()
-                .Use(b.Services.GetRequiredService<OpenAIClient>().AsEmbeddingGenerator(builder.Configuration["AI:OpenAI:EmbeddingModel"]!)));
-        }
-
-        builder.Services.AddScoped<ICatalogAI, CatalogAI>();
+        // Register mock AI service for testing until proper .NET 8 AI packages are configured
+        builder.Services.AddScoped<ICatalogAI, MockCatalogAI>();
     }
 }

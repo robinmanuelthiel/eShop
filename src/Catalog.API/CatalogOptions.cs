@@ -1,7 +1,7 @@
-﻿namespace eShop.Catalog.API;
+namespace eShop.Catalog.API;
 
 public class CatalogOptions
 {
-    public string PicBaseUrl { get; set; }
+    public required string PicBaseUrl { get; set; }
     public bool UseCustomizationData { get; set; }
 }

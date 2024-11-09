@@ -7,8 +7,11 @@
 /// </remarks>
 public class CatalogContext : DbContext
 {
+    private readonly IConfiguration _configuration;
+
     public CatalogContext(DbContextOptions<CatalogContext> options, IConfiguration configuration) : base(options)
     {
+        _configuration = configuration;
     }
 
     public DbSet<CatalogItem> CatalogItems { get; set; }
@@ -17,10 +20,16 @@ public class CatalogContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.HasPostgresExtension("vector");
+        // Only enable vector extension if AI features are enabled
+        var aiEnabled = _configuration.GetSection("CatalogOptions:EnableAIFeatures").Get<bool>();
+        if (aiEnabled)
+        {
+            builder.HasPostgresExtension("vector");
+        }
+
         builder.ApplyConfiguration(new CatalogBrandEntityTypeConfiguration());
         builder.ApplyConfiguration(new CatalogTypeEntityTypeConfiguration());
-        builder.ApplyConfiguration(new CatalogItemEntityTypeConfiguration());
+        builder.ApplyConfiguration(new CatalogItemEntityTypeConfiguration(aiEnabled));
 
         // Add the outbox table to this context
         builder.UseIntegrationEventLogs();
