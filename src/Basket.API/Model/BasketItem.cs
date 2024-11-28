@@ -23,6 +23,12 @@ public class BasketItem : IValidatableObject
             results.Add(new ValidationResult("Invalid number of units", new[] { "Quantity" }));
         }
 
+        // Make sure, that the old unit price is not higher than the new unit price
+        if (OldUnitPrice > UnitPrice)
+        {
+            results.Add(new ValidationResult("Old unit price cannot be higher than the new unit price", new[] { "OldUnitPrice" }));
+        }
+
         return results;
     }
 }
