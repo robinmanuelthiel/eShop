@@ -29,6 +29,15 @@ public class BasketService : IBasketService, IDisposable
 
     public IEnumerable<BasketItem> LocalBasketItems { get; set; }
 
+    /// <summary>
+    /// Retrieves the customer's basket asynchronously.
+    /// </summary>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains the <see cref="CustomerBasket"/>.
+    /// </returns>
+    /// <exception cref="Exception">
+    /// Thrown when an error occurs while retrieving the basket.
+    /// </exception>
     public async Task<CustomerBasket> GetBasketAsync()
     {
         CustomerBasket basket = new();
