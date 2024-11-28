@@ -9,6 +9,9 @@ public class BasketService(
     IBasketRepository repository,
     ILogger<BasketService> logger) : Basket.BasketBase
 {
+    private const int MaxItemsPerCart = 20;
+    private const int MaxQuantityPerItem = 100;
+
     [AllowAnonymous]
     public override async Task<CustomerBasketResponse> GetBasket(GetBasketRequest request, ServerCallContext context)
     {
@@ -46,6 +49,19 @@ public class BasketService(
             logger.LogDebug("Begin UpdateBasket call from method {Method} for basket id {Id}", context.Method, userId);
         }
 
+        if (request.Items.Count > MaxItemsPerCart)
+        {
+            ThrowTooManyItems();
+        }
+
+        foreach (var item in request.Items)
+        {
+            if (item.Quantity > MaxQuantityPerItem)
+            {
+                ThrowTooManyUnits();
+            }
+        }
+
         var customerBasket = MapToCustomerBasket(userId, request);
         var response = await repository.UpdateBasketAsync(customerBasket);
         if (response is null)
@@ -73,6 +89,12 @@ public class BasketService(
 
     [DoesNotReturn]
     private static void ThrowBasketDoesNotExist(string userId) => throw new RpcException(new Status(StatusCode.NotFound, $"Basket with buyer id {userId} does not exist"));
+
+    [DoesNotReturn]
+    private static void ThrowTooManyItems() => throw new RpcException(new Status(StatusCode.InvalidArgument, $"Basket cannot have more than {MaxItemsPerCart} different items"));
+
+    [DoesNotReturn]
+    private static void ThrowTooManyUnits() => throw new RpcException(new Status(StatusCode.InvalidArgument, $"Basket cannot have more than {MaxQuantityPerItem} units of a single item"));
 
     private static CustomerBasketResponse MapToCustomerBasketResponse(CustomerBasket customerBasket)
     {
