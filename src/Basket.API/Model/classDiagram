@@ -1,0 +1,12 @@
+classDiagram
+    class BasketItem {
+        +string Id
+        +int ProductId
+        +string ProductName
+        +decimal UnitPrice
+        +decimal OldUnitPrice
+        +int Quantity
+        +string PictureUrl
+        +IEnumerable~ValidationResult~ Validate(ValidationContext validationContext)
+    }
+    BasketItem : +Validate(ValidationContext validationContext)

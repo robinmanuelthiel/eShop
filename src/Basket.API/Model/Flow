@@ -1,0 +1,12 @@
+flowchart TD
+    A[BasketItem] --> B[Id : string]
+    A --> C[ProductId : int]
+    A --> D[ProductName : string]
+    A --> E[UnitPrice : decimal]
+    A --> F[OldUnitPrice : decimal]
+    A --> G[Quantity : int]
+    A --> H[PictureUrl : string]
+    A --> I[Validate(validationContext) : IEnumerable<ValidationResult>]
+    I --> J{Quantity < 1}
+    J -->|Yes| K[Add ValidationResult("Invalid number of units", new[] { "Quantity" })]
+    J -->|No| L[Return results]
