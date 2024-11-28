@@ -9,6 +9,15 @@ public class BasketService(
     IBasketRepository repository,
     ILogger<BasketService> logger) : Basket.BasketBase
 {
+    /// <summary>
+    /// Retrieves the customer basket for the specified user.
+    /// </summary>
+    /// <param name="request">The request containing the basket details.</param>
+    /// <param name="context">The server call context which contains user identity information.</param>
+    /// <returns>A <see cref="CustomerBasketResponse"/> containing the basket details if found; otherwise, an empty response.</returns>
+    /// <remarks>
+    /// This method allows anonymous access. It logs the beginning of the GetBasketById call if debug logging is enabled.
+    /// </remarks>
     [AllowAnonymous]
     public override async Task<CustomerBasketResponse> GetBasket(GetBasketRequest request, ServerCallContext context)
     {

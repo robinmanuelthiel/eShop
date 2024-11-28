@@ -77,6 +77,15 @@ public static class OrdersApi
         return TypedResults.Ok();
     }
 
+    /// <summary>
+    /// Retrieves an order by its ID.
+    /// </summary>
+    /// <param name="orderId">The ID of the order to retrieve.</param>
+    /// <param name="services">The services required to retrieve the order.</param>
+    /// <returns>
+    /// A task that represents the asynchronous operation. The task result contains a <see cref="Results{T1, T2}"/> object
+    /// which is either an <see cref="Ok{T}"/> result containing the order, or a <see cref="NotFound"/> result if the order is not found.
+    /// </returns>
     public static async Task<Results<Ok<Order>, NotFound>> GetOrderAsync(int orderId, [AsParameters] OrderServices services)
     {
         try
@@ -120,9 +129,9 @@ public static class OrdersApi
         CreateOrderRequest request,
         [AsParameters] OrderServices services)
     {
-        
+
         //mask the credit card number
-        
+
         services.Logger.LogInformation(
             "Sending command: {CommandName} - {IdProperty}: {CommandId}",
             request.GetGenericTypeName(),

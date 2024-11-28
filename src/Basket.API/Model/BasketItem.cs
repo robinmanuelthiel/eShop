@@ -3,6 +3,10 @@
 public class BasketItem : IValidatableObject
 {
     public string Id { get; set; }
+
+    /// <summary>
+    /// Gets or sets the unique identifier for the product.
+    /// </summary>
     public int ProductId { get; set; }
     public string ProductName { get; set; }
     public decimal UnitPrice { get; set; }
