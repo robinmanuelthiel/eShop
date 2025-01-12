@@ -6,8 +6,18 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Scalar.AspNetCore;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace eShop.ServiceDefaults;
+
+public class EmptyServersDocumentFilter : IDocumentFilter
+{
+    public void Apply(Microsoft.OpenApi.Models.OpenApiDocument document, DocumentFilterContext context)
+    {
+        document.Servers = [];
+    }
+}
 
 public static partial class Extensions
 {
@@ -21,7 +31,8 @@ public static partial class Extensions
             return app;
         }
 
-        app.MapOpenApi();
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         if (app.Environment.IsDevelopment())
         {
@@ -30,7 +41,7 @@ public static partial class Extensions
                 // Disable default fonts to avoid download unnecessary fonts
                 options.DefaultFonts = false;
             });
-            app.MapGet("/", () => Results.Redirect("/scalar/v1")).ExcludeFromDescription();
+            app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
         }
 
         return app;
@@ -61,7 +72,7 @@ public static partial class Extensions
             string[] versions = ["v1"];
             foreach (var description in versions)
             {
-                builder.Services.AddOpenApi(description, options =>
+                builder.Services.AddSwaggerGen(options =>
                 {
                     options.ApplyApiVersionInfo(openApi.GetRequiredValue("Document:Title"), openApi.GetRequiredValue("Document:Description"));
                     options.ApplyAuthorizationChecks([.. scopes.Keys]);
@@ -69,11 +80,7 @@ public static partial class Extensions
                     options.ApplyOperationDeprecatedStatus();
                     // Clear out the default servers so we can fallback to
                     // whatever ports have been allocated for the service by Aspire
-                    options.AddDocumentTransformer((document, context, cancellationToken) =>
-                    {
-                        document.Servers = [];
-                        return Task.CompletedTask;
-                    });
+                    options.DocumentFilter<EmptyServersDocumentFilter>();
                 });
             }
         }

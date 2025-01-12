@@ -2,13 +2,15 @@
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-    <AspnetVersion>8.0.0</AspnetVersion>
-    <MicrosoftExtensionsVersion>8.0.0</MicrosoftExtensionsVersion>
-    <AspireVersion>8.0.0</AspireVersion>
-    <AspireUnstablePackagesVersion>8.0.0</AspireUnstablePackagesVersion>
+    <AspnetVersion>8.0.3</AspnetVersion>
+    <MicrosoftExtensionsVersion>8.0.3</MicrosoftExtensionsVersion>
+    <AspireVersion>9.0.0-rc.1.24511.1</AspireVersion>
+    <AspireUnstablePackagesVersion>9.0.0-rc.1.24511.1</AspireUnstablePackagesVersion>
+    <MicrosoftAIVersion>8.0.0-preview.9.24507.7</MicrosoftAIVersion>
     <GrpcVersion>2.66.0</GrpcVersion>
     <DuendeVersion>7.0.6</DuendeVersion>
     <ApiVersioningVersion>8.1.0</ApiVersioningVersion>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <!-- Version together with Aspire -->
@@ -21,9 +23,12 @@
     <PackageVersion Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.RabbitMQ.Client" Version="$(AspireVersion)" />
     <PackageVersion Include="Aspire.StackExchange.Redis" Version="$(AspireVersion)" />
-    <PackageVersion Include="Aspire.Azure.AI.OpenAI" Version="$(AspireUnstablePackagesVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="$(AspireVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="$(AspireVersion)" />
+    <PackageVersion Include="Aspire.Azure.AI.OpenAI" Version="8.0.1-preview.8.24267.1" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Abstractions" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Telemetry" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Telemetry.Abstractions" Version="8.0.3" />
     <!-- Version together with Asp.Versioning -->
     <PackageVersion Include="Asp.Versioning.Http" Version="$(ApiVersioningVersion)" />
     <PackageVersion Include="Asp.Versioning.Http.Client" Version="$(ApiVersioningVersion)" />
@@ -33,40 +38,57 @@
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="$(AspnetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.QuickGrid" Version="$(AspnetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="$(AspnetVersion)" />
-    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.3" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.UI" Version="$(AspnetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspnetVersion)" />
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="$(AspnetVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3" />
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(AspnetVersion)" />
     <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="$(AspnetVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.OpenApi" Version="1.6.14" />
+    <PackageVersion Include="Microsoft.OpenApi.Readers" Version="1.6.14" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Diagnostics.Abstractions" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Features" Version="8.0.7" />
+    <PackageVersion Include="Microsoft.Extensions.FileProviders.Abstractions" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Http" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Configuration" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.3" />
+    <PackageVersion Include="Microsoft.Extensions.Primitives" Version="8.0.3" />
     <PackageVersion Include="MSTest.TestAdapter" Version="3.6.1" />
     <PackageVersion Include="MSTest.TestFramework" Version="3.6.2" />
     <!-- Version together with EF -->
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.2" />
     <PackageVersion Include="NSubstitute" Version="5.1.0" />
     <PackageVersion Include="NSubstitute.Analyzers.CSharp" Version="1.0.17" />
     <PackageVersion Include="Pgvector" Version="0.3.0" />
     <PackageVersion Include="Pgvector.EntityFrameworkCore" Version="0.2.1" />
     <!-- Version together with runtime -->
-    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="$(MicrosoftExtensionsVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="$(MicrosoftExtensionsVersion)" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="$(MicrosoftExtensionsVersion)" />
     <!-- Xabaril packages -->
     <PackageVersion Include="AspNetCore.HealthChecks.Uris" Version="8.0.1" />
     <!-- AI -->
-    <PackageVersion Include="Microsoft.Extensions.AI" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.AI.OpenAI" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.AI.Ollama" Version="8.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.AI" Version="$(MicrosoftAIVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="$(MicrosoftAIVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.AI.OpenAI" Version="$(MicrosoftAIVersion)" />
+    <PackageVersion Include="Microsoft.Extensions.AI.Ollama" Version="$(MicrosoftAIVersion)" />
     <!-- Open Telemetry -->
-    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.9.0" />
-    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.9.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.9.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.GrpcNetClient" Version="1.6.0-beta.3" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.9.0" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.9.0" />
+    <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.10.0" />
+    <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.10.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.10.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.GrpcNetClient" Version="1.10.0-beta.1" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.10.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.Runtime" Version="1.10.0" />
     <!-- IdentityServer -->
     <PackageVersion Include="Duende.IdentityServer" Version="$(DuendeVersion)" />
     <PackageVersion Include="Duende.IdentityServer.AspNetIdentity" Version="$(DuendeVersion)" />
@@ -94,5 +116,7 @@
     <PackageVersion Include="Yarp.ReverseProxy" Version="2.2.0" />
     <PackageVersion Include="IdentityModel" Version="7.0.0" />
     <PackageVersion Include="Scalar.AspNetCore" Version="1.2.23"/>
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
   </ItemGroup>
 </Project>

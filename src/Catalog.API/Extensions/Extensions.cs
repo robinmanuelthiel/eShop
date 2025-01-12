@@ -40,11 +40,12 @@ public static class Extensions
         }
         else if (!string.IsNullOrWhiteSpace(builder.Configuration.GetConnectionString("openai")))
         {
-            builder.AddOpenAIClientFromConfiguration("openai");
+            var openAIClient = new OpenAIClient(builder.Configuration.GetConnectionString("openai"));
+            builder.Services.AddSingleton(openAIClient);
             builder.Services.AddEmbeddingGenerator<string, Embedding<float>>(b => b
                 .UseOpenTelemetry()
                 .UseLogging()
-                .Use(b.Services.GetRequiredService<OpenAIClient>().AsEmbeddingGenerator(builder.Configuration["AI:OpenAI:EmbeddingModel"]!)));
+                .Use(openAIClient.AsEmbeddingGenerator(builder.Configuration["AI:OpenAI:EmbeddingModel"]!)));
         }
 
         builder.Services.AddScoped<ICatalogAI, CatalogAI>();

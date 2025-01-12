@@ -114,12 +114,13 @@ public static class Extensions
             var chatModel = builder.Configuration.GetSection("AI").Get<AIOptions>()?.OpenAI?.ChatModel;
             if (!string.IsNullOrWhiteSpace(builder.Configuration.GetConnectionString("openai")) && !string.IsNullOrWhiteSpace(chatModel))
             {
-                builder.AddOpenAIClientFromConfiguration("openai");
+                var openAIClient = new OpenAI.OpenAIClient(builder.Configuration.GetConnectionString("openai"));
+                builder.Services.AddSingleton(openAIClient);
                 builder.Services.AddChatClient(b => b
                     .UseFunctionInvocation()
                     .UseOpenTelemetry(configure: t => t.EnableSensitiveData = true)
                     .UseLogging()
-                    .Use(b.Services.GetRequiredService<OpenAIClient>().AsChatClient(chatModel ?? "gpt-4o-mini")));
+                    .Use(openAIClient.AsChatClient(chatModel ?? "gpt-4o-mini")));
             }
         }
     }
