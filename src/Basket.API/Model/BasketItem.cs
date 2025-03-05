@@ -1,4 +1,6 @@
-﻿namespace eShop.Basket.API.Model;
+﻿using System.Diagnostics.Metrics;
+
+namespace eShop.Basket.API.Model;
 
 public class BasketItem : IValidatableObject
 {
@@ -17,6 +19,10 @@ public class BasketItem : IValidatableObject
         if (Quantity < 1)
         {
             results.Add(new ValidationResult("Invalid number of units", new[] { "Quantity" }));
+        }
+        if (Quantity > 100)
+        {
+            results.Add(new ValidationResult("Cannot have more than 100 of the same item in the basket", new[] { "Quantity" }));
         }
 
         return results;
