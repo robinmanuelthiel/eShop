@@ -61,15 +61,37 @@
         catalogItemTypes = itemTypesTask.Result;
     }
 
-    private string BrandUri(int? brandId) => Nav.GetUriWithQueryParameters(new Dictionary<string, object?>()
+    private string BrandUri(int? brandId)
     {
-        { "page", null },
-        { "brand", brandId },
-    });
+        var uri = Nav.ToBaseRelativePath(Nav.Uri).Split('?')[0];
+        var query = new Dictionary<string, object?>
+        {
+            { "page", null },
+            { "brand", brandId },
+            { "type", ItemTypeId }
+        };
+        var rel = uri + QueryString(query);
+        return rel.StartsWith("/") ? rel : "/" + rel;
+    }
 
-    private string TypeUri(int? typeId) => Nav.GetUriWithQueryParameters(new Dictionary<string, object?>()
+    private string TypeUri(int? typeId)
     {
-        { "page", null },
-        { "type", typeId },
-    });
+        var uri = Nav.ToBaseRelativePath(Nav.Uri).Split('?')[0];
+        var query = new Dictionary<string, object?>
+        {
+            { "page", null },
+            { "brand", BrandId },
+            { "type", typeId }
+        };
+        var rel = uri + QueryString(query);
+        return rel.StartsWith("/") ? rel : "/" + rel;
+    }
+
+    private static string QueryString(Dictionary<string, object?> query)
+    {
+        var parts = query
+            .Where(kv => kv.Value != null)
+            .Select(kv => $"{kv.Key}={Uri.EscapeDataString(kv.Value!.ToString()!)}");
+        return parts.Any() ? "?" + string.Join("&", parts) : string.Empty;
+    }
 }
