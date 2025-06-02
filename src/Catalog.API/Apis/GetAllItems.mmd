@@ -1,0 +1,25 @@
+# Ablaufdiagramm für GetAllItems (CatalogApi)
+
+```mermaid
+flowchart TD
+    A[Start] --> B[Hole pageSize und pageIndex aus paginationRequest]
+    B --> C[Setze root auf alle CatalogItems]
+    C --> D{Ist name angegeben?}
+    D -- Ja --> E[root filtern: Name beginnt mit name]
+    D -- Nein --> F
+    E --> F{Ist type angegeben?}
+    F -- Ja --> G[root filtern: CatalogTypeId == type]
+    F -- Nein --> H
+    G --> H{Ist brand angegeben?}
+    H -- Ja --> I[root filtern: CatalogBrandId == brand]
+    H -- Nein --> J
+    I --> J
+    J --> K[Ermittle totalItems (LongCountAsync)]
+    K --> L[Ermittle itemsOnPage (OrderBy, Skip, Take, ToListAsync)]
+    L --> M[Erzeuge PaginatedItems-Objekt]
+    M --> N[Return Ok(PaginatedItems)]
+    N --> O[Ende]
+```
+
+**Beschreibung:**
+Dieses Ablaufdiagramm zeigt die Schritte der Methode `GetAllItems` in der `CatalogApi`. Die Methode filtert optional nach Name, Typ und Marke, zählt die Gesamtanzahl der Items und gibt eine paginierte Liste zurück.
