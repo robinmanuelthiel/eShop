@@ -9,6 +9,11 @@ namespace eShop.Catalog.API;
 
 public static class CatalogApi
 {
+    /// <summary>
+    /// Registriert alle Endpunkte für das Catalog API.
+    /// </summary>
+    /// <param name="app">Der Endpoint-Route-Builder.</param>
+    /// <returns>Der Endpoint-Route-Builder mit registrierten Endpunkten.</returns>
     public static IEndpointRouteBuilder MapCatalogApi(this IEndpointRouteBuilder app)
     {
         // RouteGroupBuilder for catalog endpoints
@@ -112,6 +117,12 @@ public static class CatalogApi
         return app;
     }
 
+    /// <summary>
+    /// Gibt alle Katalog-Items (V1) paginiert zurück.
+    /// </summary>
+    /// <param name="paginationRequest">Paginierungsparameter.</param>
+    /// <param name="services">Katalogdienste.</param>
+    /// <returns>Paginierte Liste von Katalog-Items.</returns>
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
     public static async Task<Ok<PaginatedItems<CatalogItem>>> GetAllItemsV1(
         [AsParameters] PaginationRequest paginationRequest,
@@ -120,6 +131,15 @@ public static class CatalogApi
         return await GetAllItems(paginationRequest, services, null, null, null);
     }
 
+    /// <summary>
+    /// Gibt alle Katalog-Items paginiert zurück, optional gefiltert nach Name, Typ oder Marke.
+    /// </summary>
+    /// <param name="paginationRequest">Paginierungsparameter.</param>
+    /// <param name="services">Katalogdienste.</param>
+    /// <param name="name">Name des Items (optional).</param>
+    /// <param name="type">Typ-ID (optional).</param>
+    /// <param name="brand">Marken-ID (optional).</param>
+    /// <returns>Paginierte Liste von Katalog-Items.</returns>
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
     public static async Task<Ok<PaginatedItems<CatalogItem>>> GetAllItems(
         [AsParameters] PaginationRequest paginationRequest,
@@ -158,6 +178,12 @@ public static class CatalogApi
         return TypedResults.Ok(new PaginatedItems<CatalogItem>(pageIndex, pageSize, totalItems, itemsOnPage));
     }
 
+    /// <summary>
+    /// Gibt eine Liste von Katalog-Items anhand einer Liste von IDs zurück.
+    /// </summary>
+    /// <param name="services">Katalogdienste.</param>
+    /// <param name="ids">IDs der gewünschten Items.</param>
+    /// <returns>Liste der gefundenen Katalog-Items.</returns>
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
     public static async Task<Ok<List<CatalogItem>>> GetItemsByIds(
         [AsParameters] CatalogServices services,
@@ -167,6 +193,13 @@ public static class CatalogApi
         return TypedResults.Ok(items);
     }
 
+    /// <summary>
+    /// Gibt ein einzelnes Katalog-Item anhand der ID zurück.
+    /// </summary>
+    /// <param name="httpContext">HTTP-Kontext.</param>
+    /// <param name="services">Katalogdienste.</param>
+    /// <param name="id">ID des Items.</param>
+    /// <returns>Das gefundene Item oder Fehlerstatus.</returns>
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
     public static async Task<Results<Ok<CatalogItem>, NotFound, BadRequest<ProblemDetails>>> GetItemById(
         HttpContext httpContext,
@@ -190,6 +223,13 @@ public static class CatalogApi
         return TypedResults.Ok(item);
     }
 
+    /// <summary>
+    /// Gibt eine paginierte Liste von Katalog-Items anhand des Namens zurück.
+    /// </summary>
+    /// <param name="paginationRequest">Paginierungsparameter.</param>
+    /// <param name="services">Katalogdienste.</param>
+    /// <param name="name">Name des Items.</param>
+    /// <returns>Paginierte Liste von Katalog-Items.</returns>
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
     public static async Task<Ok<PaginatedItems<CatalogItem>>> GetItemsByName(
         [AsParameters] PaginationRequest paginationRequest,
@@ -199,6 +239,13 @@ public static class CatalogApi
         return await GetAllItems(paginationRequest, services, name, null, null);
     }
 
+    /// <summary>
+    /// Gibt das Bild eines Katalog-Items anhand der ID zurück.
+    /// </summary>
+    /// <param name="context">Katalogdatenbank-Kontext.</param>
+    /// <param name="environment">Webhost-Umgebung.</param>
+    /// <param name="id">ID des Items.</param>
+    /// <returns>Das Bild als Datei oder NotFound.</returns>
     [ProducesResponseType<byte[]>(StatusCodes.Status200OK, "application/octet-stream",
         [ "image/png", "image/gif", "image/jpeg", "image/bmp", "image/tiff",
           "image/wmf", "image/jp2", "image/svg+xml", "image/webp" ])]
@@ -223,6 +270,13 @@ public static class CatalogApi
         return TypedResults.PhysicalFile(path, mimetype, lastModified: lastModified);
     }
 
+    /// <summary>
+    /// Sucht Katalog-Items mit semantischer Relevanz (V1).
+    /// </summary>
+    /// <param name="paginationRequest">Paginierungsparameter.</param>
+    /// <param name="services">Katalogdienste.</param>
+    /// <param name="text">Suchtext.</param>
+    /// <returns>Paginierte Liste relevanter Items oder Redirect.</returns>
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
     public static async Task<Results<Ok<PaginatedItems<CatalogItem>>, RedirectToRouteHttpResult>> GetItemsBySemanticRelevanceV1(
         [AsParameters] PaginationRequest paginationRequest,
@@ -233,6 +287,13 @@ public static class CatalogApi
         return await GetItemsBySemanticRelevance(paginationRequest, services, text);
     }
 
+    /// <summary>
+    /// Sucht Katalog-Items mit semantischer Relevanz.
+    /// </summary>
+    /// <param name="paginationRequest">Paginierungsparameter.</param>
+    /// <param name="services">Katalogdienste.</param>
+    /// <param name="text">Suchtext.</param>
+    /// <returns>Paginierte Liste relevanter Items oder Redirect.</returns>
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
     public static async Task<Results<Ok<PaginatedItems<CatalogItem>>, RedirectToRouteHttpResult>> GetItemsBySemanticRelevance(
         [AsParameters] PaginationRequest paginationRequest,
@@ -281,6 +342,14 @@ public static class CatalogApi
         return TypedResults.Ok(new PaginatedItems<CatalogItem>(pageIndex, pageSize, totalItems, itemsOnPage));
     }
 
+    /// <summary>
+    /// Gibt eine paginierte Liste von Katalog-Items nach Typ und optionaler Marke zurück.
+    /// </summary>
+    /// <param name="paginationRequest">Paginierungsparameter.</param>
+    /// <param name="services">Katalogdienste.</param>
+    /// <param name="typeId">Typ-ID.</param>
+    /// <param name="brandId">Marken-ID (optional).</param>
+    /// <returns>Paginierte Liste von Katalog-Items.</returns>
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
     public static async Task<Ok<PaginatedItems<CatalogItem>>> GetItemsByBrandAndTypeId(
         [AsParameters] PaginationRequest paginationRequest,
@@ -291,6 +360,13 @@ public static class CatalogApi
         return await GetAllItems(paginationRequest, services, null, typeId, brandId);
     }
 
+    /// <summary>
+    /// Gibt eine paginierte Liste von Katalog-Items nach Marke zurück.
+    /// </summary>
+    /// <param name="paginationRequest">Paginierungsparameter.</param>
+    /// <param name="services">Katalogdienste.</param>
+    /// <param name="brandId">Marken-ID (optional).</param>
+    /// <returns>Paginierte Liste von Katalog-Items.</returns>
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
     public static async Task<Ok<PaginatedItems<CatalogItem>>> GetItemsByBrandId(
         [AsParameters] PaginationRequest paginationRequest,
@@ -300,6 +376,13 @@ public static class CatalogApi
         return await GetAllItems(paginationRequest, services, null, null, brandId);
     }
 
+    /// <summary>
+    /// Aktualisiert ein Katalog-Item (V1).
+    /// </summary>
+    /// <param name="httpContext">HTTP-Kontext.</param>
+    /// <param name="services">Katalogdienste.</param>
+    /// <param name="productToUpdate">Zu aktualisierendes Produkt.</param>
+    /// <returns>Ergebnis der Aktualisierung.</returns>
     public static async Task<Results<Created, BadRequest<ProblemDetails>, NotFound<ProblemDetails>>> UpdateItemV1(
         HttpContext httpContext,
         [AsParameters] CatalogServices services,
@@ -314,6 +397,14 @@ public static class CatalogApi
         return await UpdateItem(httpContext, productToUpdate.Id, services, productToUpdate);
     }
 
+    /// <summary>
+    /// Aktualisiert ein Katalog-Item anhand der ID.
+    /// </summary>
+    /// <param name="httpContext">HTTP-Kontext.</param>
+    /// <param name="id">ID des zu aktualisierenden Items.</param>
+    /// <param name="services">Katalogdienste.</param>
+    /// <param name="productToUpdate">Zu aktualisierendes Produkt.</param>
+    /// <returns>Ergebnis der Aktualisierung.</returns>
     public static async Task<Results<Created, BadRequest<ProblemDetails>, NotFound<ProblemDetails>>> UpdateItem(
         HttpContext httpContext,
         [Description("The id of the catalog item to delete")] int id,
@@ -355,6 +446,12 @@ public static class CatalogApi
         return TypedResults.Created($"/api/catalog/items/{id}");
     }
 
+    /// <summary>
+    /// Erstellt ein neues Katalog-Item.
+    /// </summary>
+    /// <param name="services">Katalogdienste.</param>
+    /// <param name="product">Zu erstellendes Produkt.</param>
+    /// <returns>Ergebnis der Erstellung.</returns>
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, "application/problem+json")]
     public static async Task<Created> CreateItem(
         [AsParameters] CatalogServices services,
@@ -381,6 +478,12 @@ public static class CatalogApi
         return TypedResults.Created($"/api/catalog/items/{item.Id}");
     }
 
+    /// <summary>
+    /// Löscht ein Katalog-Item anhand der ID.
+    /// </summary>
+    /// <param name="services">Katalogdienste.</param>
+    /// <param name="id">ID des zu löschenden Items.</param>
+    /// <returns>Ergebnis der Löschung.</returns>
     public static async Task<Results<NoContent, NotFound>> DeleteItemById(
         [AsParameters] CatalogServices services,
         [Description("The id of the catalog item to delete")] int id)
@@ -397,6 +500,11 @@ public static class CatalogApi
         return TypedResults.NoContent();
     }
 
+    /// <summary>
+    /// Gibt den MIME-Typ anhand der Dateiendung zurück.
+    /// </summary>
+    /// <param name="extension">Dateiendung.</param>
+    /// <returns>MIME-Typ als String.</returns>
     private static string GetImageMimeTypeFromImageFileExtension(string extension) => extension switch
     {
         ".png" => "image/png",
@@ -411,6 +519,12 @@ public static class CatalogApi
         _ => "application/octet-stream",
     };
 
+    /// <summary>
+    /// Gibt den vollständigen Pfad zum Bild zurück.
+    /// </summary>
+    /// <param name="contentRootPath">Root-Pfad der Anwendung.</param>
+    /// <param name="pictureFileName">Dateiname des Bildes.</param>
+    /// <returns>Vollständiger Pfad zum Bild.</returns>
     public static string GetFullPath(string contentRootPath, string pictureFileName) =>
         Path.Combine(contentRootPath, "Pics", pictureFileName);
 }
