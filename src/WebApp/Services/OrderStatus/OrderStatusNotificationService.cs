@@ -1,4 +1,11 @@
-﻿namespace eShop.WebApp.Services;
+﻿/// <summary>
+/// Provides services related to order status notifications within the eShop web application.
+/// </summary>
+/// <remarks>
+/// Siehe die zugehörige Mermaid-Diagrammdatei für eine visuelle Darstellung der Klasse.
+/// Die Diagrammdatei befindet sich parallel zu dieser C#-Datei und trägt die Endung ".mmd".
+/// </remarks>
+namespace eShop.WebApp.Services;
 
 public class OrderStatusNotificationService
 {
