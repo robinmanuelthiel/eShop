@@ -1,4 +1,9 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿/// <summary>
+/// Represents the catalog view in the client application.
+/// Handles product list display, badge animation on product count changes, and header image effects on scroll.
+/// </summary>
+
+using CommunityToolkit.Mvvm.Messaging;
 using eShop.ClientApp.Messages;
 
 namespace eShop.ClientApp.Views;
