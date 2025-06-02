@@ -13,6 +13,11 @@ namespace eShop.ServiceDefaults;
 
 public static partial class Extensions
 {
+    /// <summary>
+    /// Fügt Standarddienste für das Service Mesh, Service Discovery und HTTP-Client-Defaults hinzu.
+    /// </summary>
+    /// <param name="builder">Der HostApplicationBuilder.</param>
+    /// <returns>Der konfigurierte HostApplicationBuilder.</returns>
     public static IHostApplicationBuilder AddServiceDefaults(this IHostApplicationBuilder builder)
     {
         builder.AddBasicServiceDefaults();
@@ -32,11 +37,10 @@ public static partial class Extensions
     }
 
     /// <summary>
-    /// Adds the services except for making outgoing HTTP calls.
+    /// Fügt grundlegende Service-Defaults wie Health Checks und OpenTelemetry hinzu.
     /// </summary>
-    /// <remarks>
-    /// This allows for things like Polly to be trimmed out of the app if it isn't used.
-    /// </remarks>
+    /// <param name="builder">Der HostApplicationBuilder.</param>
+    /// <returns>Der konfigurierte HostApplicationBuilder.</returns>
     public static IHostApplicationBuilder AddBasicServiceDefaults(this IHostApplicationBuilder builder)
     {
         // Default health checks assume the event bus and self health checks
@@ -47,6 +51,11 @@ public static partial class Extensions
         return builder;
     }
 
+    /// <summary>
+    /// Konfiguriert OpenTelemetry für Logging, Metriken und Tracing.
+    /// </summary>
+    /// <param name="builder">Der HostApplicationBuilder.</param>
+    /// <returns>Der konfigurierte HostApplicationBuilder.</returns>
     public static IHostApplicationBuilder ConfigureOpenTelemetry(this IHostApplicationBuilder builder)
     {
         builder.Logging.AddOpenTelemetry(logging =>
@@ -82,6 +91,11 @@ public static partial class Extensions
         return builder;
     }
 
+    /// <summary>
+    /// Fügt OpenTelemetry-Exporter hinzu, wenn ein OTLP-Endpunkt konfiguriert ist.
+    /// </summary>
+    /// <param name="builder">Der HostApplicationBuilder.</param>
+    /// <returns>Der konfigurierte HostApplicationBuilder.</returns>
     private static IHostApplicationBuilder AddOpenTelemetryExporters(this IHostApplicationBuilder builder)
     {
         var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
@@ -96,6 +110,11 @@ public static partial class Extensions
         return builder;
     }
 
+    /// <summary>
+    /// Fügt Standard-Health-Checks hinzu, einschließlich eines Liveness-Checks.
+    /// </summary>
+    /// <param name="builder">Der HostApplicationBuilder.</param>
+    /// <returns>Der konfigurierte HostApplicationBuilder.</returns>
     public static IHostApplicationBuilder AddDefaultHealthChecks(this IHostApplicationBuilder builder)
     {
         builder.Services.AddHealthChecks()
@@ -105,6 +124,11 @@ public static partial class Extensions
         return builder;
     }
 
+    /// <summary>
+    /// Mappt Standardendpunkte wie Health Checks und optional Prometheus.
+    /// </summary>
+    /// <param name="app">Die WebApplication-Instanz.</param>
+    /// <returns>Die konfigurierte WebApplication.</returns>
     public static WebApplication MapDefaultEndpoints(this WebApplication app)
     {
         // Uncomment the following line to enable the Prometheus endpoint (requires the OpenTelemetry.Exporter.Prometheus.AspNetCore package)

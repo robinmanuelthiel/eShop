@@ -1,0 +1,6 @@
+flowchart TD
+    A[AddItemToBasket aufrufen] --> B{Produkt bereits im Warenkorb?}
+    B -- Ja --> C[Erhöhe Quantity des vorhandenen Items]
+    C --> D[Beenden]
+    B -- Nein --> E[Füge neues BasketItem zur Liste hinzu]
+    E --> D
