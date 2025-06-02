@@ -1,0 +1,67 @@
+classDiagram
+    %% Hauptbereiche
+    class CatalogService {
+        +GetCatalogItem()
+        +GetCatalogItems()
+        +GetBrands()
+        +GetTypes()
+    }
+    class BasketService {
+        +GetBasket()
+        +AddItem()
+        +RemoveItem()
+    }
+    class OrderService {
+        +CreateOrder()
+        +GetOrders()
+    }
+    class IdentityService {
+        +Authenticate()
+        +Register()
+    }
+    class Product {
+        +Id
+        +Name
+        +Description
+        +Price
+    }
+    class Basket {
+        +Id
+        +UserId
+        +Items
+    }
+    class Order {
+        +Id
+        +UserId
+        +OrderItems
+        +Total
+    }
+    class User {
+        +Id
+        +Email
+        +PasswordHash
+    }
+    %% Beziehungen
+    CatalogService --> Product : manages
+    BasketService --> Basket : manages
+    Basket o-- Product : contains
+    OrderService --> Order : manages
+    Order o-- Product : contains
+    Order o-- User : belongs to
+    Basket o-- User : belongs to
+    IdentityService --> User : manages
+    %% Styling
+    classDef service fill:#e0f7fa,stroke:#00796b,stroke-width:2px;
+    classDef domain fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px;
+    class CatalogService
+    class BasketService
+    classOrderService
+    class IdentityService
+    class service
+
+    class Product
+    class Basket
+    class     Order
+    class User
+    class domain
+
