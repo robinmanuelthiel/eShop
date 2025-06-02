@@ -3,6 +3,15 @@
 @inject CatalogService CatalogService
 @attribute [StreamRendering]
 
+@* 
+    This Razor component defines the main content for the Catalog page in the AdventureWorks web application.
+
+    - <PageTitle>: Sets the browser tab title to "AdventureWorks".
+    - <SectionContent SectionName="page-header-title">: Displays the main header with the text "Bereit zum einkaufen?" (Ready to shop?).
+    - <SectionContent SectionName="page-header-subtitle">: Shows a subtitle encouraging users to start the season with the latest clothing and equipment.
+
+    The component uses localized and marketing-oriented text to engage users at the top of the catalog page.
+*@
 <PageTitle>AdventureWorks</PageTitle>
 <SectionContent SectionName="page-header-title">Bereit zum einkaufen?</SectionContent>
 <SectionContent SectionName="page-header-subtitle">Start the season with the latest in clothing and equipment.</SectionContent>
