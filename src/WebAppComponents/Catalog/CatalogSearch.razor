@@ -61,11 +61,35 @@
         catalogItemTypes = itemTypesTask.Result;
     }
 
-    private string BrandUri(int? brandId) => Nav.GetUriWithQueryParameters(new Dictionary<string, object?>()
+    private string BrandUri(int? brandId)
     {
-        { "page", null },
-        { "brand", brandId },
-    });
+        var baseUri = Nav.BaseUri;
+        // Ersetze explizit localhost-URL durch Codespaces-URL
+        if (baseUri.StartsWith("https://localhost:"))
+        {
+            // Beispiel: https://localhost:5045/ => https://glowing-sniffle-976q9pvxpq6xf7r74-5045.app.github.dev/
+            // Extrahiere Port
+            var uri = new Uri(baseUri);
+            var port = uri.Port;
+            // Setze den Codespaces-Host (dieser sollte ggf. konfigurierbar sein)
+            var codespacesHost = $"glowing-sniffle-976q9pvxpq6xf7r74-{port}.app.github.dev";
+            var url = $"https://{codespacesHost}/?brand={(brandId.HasValue ? brandId.ToString() : "")}";
+            return url;
+        }
+        if (baseUri.Contains(".github.dev"))
+        {
+            var uri = new Uri(baseUri);
+            var host = uri.Host;
+            var url = $"https://{host}/?brand={(brandId.HasValue ? brandId.ToString() : "")}";
+            return url;
+        }
+        // Fallback: Standard-URL
+        return Nav.GetUriWithQueryParameters(new Dictionary<string, object?>()
+        {
+            { "page", null },
+            { "brand", brandId },
+        });
+    }
 
     private string TypeUri(int? typeId) => Nav.GetUriWithQueryParameters(new Dictionary<string, object?>()
     {
