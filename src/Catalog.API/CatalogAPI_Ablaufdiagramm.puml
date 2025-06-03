@@ -1,0 +1,15 @@
+@startuml
+' Ablaufdiagramm: Katalog-Item-Abfrage (z.B. GET /api/catalog/items)
+
+actor Client
+participant "CatalogApi (Controller)" as API
+participant "CatalogServices" as Service
+participant "CatalogContext (DbContext)" as Db
+
+Client -> API : GET /api/catalog/items
+API -> Service : GetAllItems(...)
+Service -> Db : CatalogItems.Where(...)
+Db --> Service : List<CatalogItem>
+Service --> API : PaginatedItems<CatalogItem>
+API --> Client : 200 OK + Daten
+@enduml

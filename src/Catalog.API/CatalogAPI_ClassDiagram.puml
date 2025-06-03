@@ -1,0 +1,72 @@
+@startuml
+' Klassenstruktur für Catalog.API
+
+class CatalogItem {
+  +int Id
+  +string Name
+  +string Description
+  +decimal Price
+  +string PictureFileName
+  +int CatalogTypeId
+  +CatalogType CatalogType
+  +int CatalogBrandId
+  +CatalogBrand CatalogBrand
+  +int AvailableStock
+  +int RestockThreshold
+  +int MaxStockThreshold
+  +bool OnReorder
+}
+
+class CatalogBrand {
+  +int Id
+  +string Brand
+}
+
+class CatalogType {
+  +int Id
+  +string Type
+}
+
+class PaginatedItems<T> {
+  +int PageIndex
+  +int PageSize
+  +long Count
+  +IEnumerable<T> Data
+}
+
+class PaginationRequest {
+  +int PageSize
+  +int PageIndex
+}
+
+class CatalogContext {
+  +DbSet<CatalogItem> CatalogItems
+  +DbSet<CatalogBrand> CatalogBrands
+  +DbSet<CatalogType> CatalogTypes
+}
+
+class CatalogServices {
+  +CatalogContext Context
+  +ICatalogAI CatalogAI
+  +IOptions<CatalogOptions> Options
+  +ILogger Logger
+  +ICatalogIntegrationEventService EventService
+}
+
+interface ICatalogAI {
+  +IsEnabled : bool
+  +GetEmbeddingAsync(string) : ValueTask<Vector>
+  +GetEmbeddingAsync(CatalogItem) : ValueTask<Vector>
+  +GetEmbeddingsAsync(IEnumerable<CatalogItem>) : ValueTask<IReadOnlyList<Vector>>
+}
+
+CatalogItem --> CatalogBrand
+CatalogItem --> CatalogType
+CatalogContext --> CatalogItem
+CatalogContext --> CatalogBrand
+CatalogContext --> CatalogType
+CatalogServices --> CatalogContext
+CatalogServices --> ICatalogAI
+CatalogServices --> ICatalogIntegrationEventService
+
+@enduml
