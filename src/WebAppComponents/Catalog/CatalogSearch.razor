@@ -91,9 +91,30 @@
         });
     }
 
-    private string TypeUri(int? typeId) => Nav.GetUriWithQueryParameters(new Dictionary<string, object?>()
+    private string TypeUri(int? typeId)
     {
-        { "page", null },
-        { "type", typeId },
-    });
+        var baseUri = Nav.BaseUri;
+        // Ersetze explizit localhost-URL durch Codespaces-URL
+        if (baseUri.StartsWith("https://localhost:"))
+        {
+            var uri = new Uri(baseUri);
+            var port = uri.Port;
+            var codespacesHost = $"glowing-sniffle-976q9pvxpq6xf7r74-{port}.app.github.dev";
+            var url = $"https://{codespacesHost}/?type={(typeId.HasValue ? typeId.ToString() : "")}";
+            return url;
+        }
+        if (baseUri.Contains(".github.dev"))
+        {
+            var uri = new Uri(baseUri);
+            var host = uri.Host;
+            var url = $"https://{host}/?type={(typeId.HasValue ? typeId.ToString() : "")}";
+            return url;
+        }
+        // Fallback: Standard-URL
+        return Nav.GetUriWithQueryParameters(new Dictionary<string, object?>()
+        {
+            { "page", null },
+            { "type", typeId },
+        });
+    }
 }
