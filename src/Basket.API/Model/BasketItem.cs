@@ -9,7 +9,7 @@ public class BasketItem : IValidatableObject
     public decimal OldUnitPrice { get; set; }
     public int Quantity { get; set; }
     public string PictureUrl { get; set; }
-
+// Validiert die Eigenschaften des BasketItem-Objekts und gibt eine Liste von Validierungsfehlern zurück.
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         var results = new List<ValidationResult>();
