@@ -1,12 +1,11 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using eShop.Ordering.API.Application.Models;
 
 namespace eShop.Ordering.UnitTests.Application.Models
 {
-    [TestClass]
     public class BasketItemTest
     {
-        [TestMethod]
+        [Fact]
         public void Can_Create_BasketItem_With_All_Properties()
         {
             // Arrange
@@ -31,16 +30,16 @@ namespace eShop.Ordering.UnitTests.Application.Models
             };
 
             // Assert
-            Assert.AreEqual(id, item.Id);
-            Assert.AreEqual(productId, item.ProductId);
-            Assert.AreEqual(productName, item.ProductName);
-            Assert.AreEqual(unitPrice, item.UnitPrice);
-            Assert.AreEqual(oldUnitPrice, item.OldUnitPrice);
-            Assert.AreEqual(quantity, item.Quantity);
-            Assert.AreEqual(pictureUrl, item.PictureUrl);
+            Assert.Equal(id, item.Id);
+            Assert.Equal(productId, item.ProductId);
+            Assert.Equal(productName, item.ProductName);
+            Assert.Equal(unitPrice, item.UnitPrice);
+            Assert.Equal(oldUnitPrice, item.OldUnitPrice);
+            Assert.Equal(quantity, item.Quantity);
+            Assert.Equal(pictureUrl, item.PictureUrl);
         }
 
-        [TestMethod]
+        [Fact]
         public void BasketItem_Properties_Are_Immutable()
         {
             // Arrange
@@ -66,13 +65,13 @@ namespace eShop.Ordering.UnitTests.Application.Models
             // item.Quantity = 2;
             // item.PictureUrl = "http://example.com/changed.png";
 
-            Assert.AreEqual("item2", item.Id);
-            Assert.AreEqual(99, item.ProductId);
-            Assert.AreEqual("Immutable Product", item.ProductName);
-            Assert.AreEqual(20.0m, item.UnitPrice);
-            Assert.AreEqual(25.0m, item.OldUnitPrice);
-            Assert.AreEqual(1, item.Quantity);
-            Assert.AreEqual("http://example.com/immutable.png", item.PictureUrl);
+            Assert.Equal("item2", item.Id);
+            Assert.Equal(99, item.ProductId);
+            Assert.Equal("Immutable Product", item.ProductName);
+            Assert.Equal(20.0m, item.UnitPrice);
+            Assert.Equal(25.0m, item.OldUnitPrice);
+            Assert.Equal(1, item.Quantity);
+            Assert.Equal("http://example.com/immutable.png", item.PictureUrl);
         }
     }
 }
