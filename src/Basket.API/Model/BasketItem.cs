@@ -18,6 +18,10 @@ public class BasketItem : IValidatableObject
         {
             results.Add(new ValidationResult("Invalid number of units", new[] { "Quantity" }));
         }
+        if (UnitPrice < 0)
+        {
+            results.Add(new ValidationResult("Unit price cannot be negative", new[] { "UnitPrice" }));
+        }
 
         return results;
     }
