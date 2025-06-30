@@ -1,6 +1,8 @@
 ﻿using eShop.WebApp.Components;
 using eShop.ServiceDefaults;
 
+// Initializes a new instance of the WebApplication builder with the specified command-line arguments.
+// This builder is used to configure services, middleware, and the application's request pipeline.
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();

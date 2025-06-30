@@ -1,4 +1,40 @@
-﻿@page "/cart"
+﻿@*
+    CartPage.razor
+
+    This Razor component represents the shopping cart page for the AdventureWorks web application.
+    It displays the current user's shopping bag, allowing them to view, update, and proceed to checkout with their selected products.
+
+    Features:
+    - Displays a list of products currently in the user's cart, including product image, name, unit price, quantity, and total price per item.
+    - Allows users to update the quantity of each product directly from the cart.
+    - Shows a summary section with the total quantity and total price of items in the cart.
+    - Provides navigation options to proceed to checkout or continue shopping.
+    - Handles loading and empty cart states gracefully.
+    - Uses dependency injection for navigation, basket state management, and product image URL resolution.
+    - Implements form handling for updating product quantities with antiforgery protection.
+    - Requires user authorization to access the cart page.
+    - Utilizes stream rendering for improved performance.
+
+    Parameters and Properties:
+    - basketItems: The collection of items currently in the user's basket.
+    - UpdateQuantityId: The product ID for which the quantity is being updated (bound from form).
+    - UpdateQuantityValue: The new quantity value for the product being updated (bound from form).
+    - TotalPrice: The computed total price of all items in the cart.
+    - TotalQuantity: The computed total quantity of all items in the cart.
+
+    Methods:
+    - OnInitializedAsync: Loads the basket items when the component is initialized.
+    - CurrentOrPendingQuantity: Determines the quantity to display for a product, accounting for pending updates.
+    - UpdateQuantityAsync: Handles the form submission to update the quantity of a product in the cart.
+
+    Attributes:
+    - [StreamRendering]: Enables streaming rendering for the component.
+    - [Authorize]: Restricts access to authenticated users only.
+
+    Usage:
+    - This component should be used as the main shopping cart page, accessible via the "/cart" route.
+*@
+@page "/cart"
 @inject NavigationManager Nav
 @inject BasketState Basket
 @inject IProductImageUrlProvider ProductImages
@@ -32,9 +68,9 @@
                 var quantity = CurrentOrPendingQuantity(item.ProductId, item.Quantity);
                 <div class="cart-item" @key="@item.Id">
                     <div class="catalog-item-info">
-                        <img alt="@item.ProductName" src="@ProductImages.GetProductImageUrl(item.ProductId)" />
+                        <img alt="@item.CamelCaseProductName" src="@ProductImages.GetProductImageUrl(item.ProductId)" />
                         <div class="catalog-item-content">
-                            <p class="name">@item.ProductName</p>
+                            <p class="name">@item.CamelCaseProductName</p>
                             <p class="price">$@item.UnitPrice.ToString("0.00")</p>
                         </div>
                     </div>

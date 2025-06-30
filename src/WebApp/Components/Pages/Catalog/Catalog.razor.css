@@ -90,29 +90,53 @@
     flex-grow: 1;
 }
 
-.page-links {
+.loading-indicator {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    justify-content: center;
-    margin-top: 1.5rem;
-}
-
-::deep a {
-    display: flex;
-    padding: 12px 20px;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 4px;
-    background: #F7F7F7;
-    color: #000;
-    text-decoration: none;
+    padding: 2rem;
+    margin-top: 1rem;
 }
 
-.page-links ::deep a.active-page {
-    color: #F7F7F7;
-    background-color: #000;
+.loading-indicator p {
+    color: #666;
+    font-style: italic;
+}
+
+.load-more-trigger {
+    height: auto;
+    margin-top: 2rem;
+    padding: 1rem;
+    text-align: center;
+    border: 1px dashed #ccc;
+    border-radius: 0.5rem;
+    background-color: #f9f9f9;
+}
+
+.load-more-trigger .trigger-content {
+    color: #666;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.load-more-manual {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.load-more-manual .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    background-color: transparent;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.load-more-manual .btn:hover {
+    background-color: #f0f0f0;
+    border-color: #999;
 }
 
 
@@ -122,10 +146,6 @@
         flex-direction: column;
         gap: 1rem;
     }
-
-    .page-links {
-        flex-wrap: wrap;
-    }
 }
 
 @media only screen and (min-width: 481px) and (max-width: 1024px) { 
@@ -133,9 +153,5 @@
         padding: 0 3rem;
         flex-direction: column;
         gap: 1.5rem;
-    }
-
-    .page-links {
-        flex-wrap: wrap;
     }
 }

@@ -1,44 +1,66 @@
 ﻿@page "/"
+@using eShop.WebAppComponents.Catalog
+@using eShop.WebAppComponents.Services
+@using Microsoft.JSInterop
 @inject NavigationManager Nav
 @inject CatalogService CatalogService
+@inject IJSRuntime JSRuntime
 @attribute [StreamRendering]
+@implements IAsyncDisposable
 
 <PageTitle>AdventureWorks</PageTitle>
 <SectionContent SectionName="page-header-title">Ready for a new adventure?</SectionContent>
 <SectionContent SectionName="page-header-subtitle">Start the season with the latest in clothing and equipment.</SectionContent>
 
 <div class="catalog">
-    <CatalogSearch BrandId="@BrandId" ItemTypeId="@ItemTypeId" />
+    <eShop.WebAppComponents.Catalog.CatalogSearch BrandId="@BrandId" ItemTypeId="@ItemTypeId" />
 
-    @if (catalogResult is null)
+    @if (catalogItems is null)
     {
         <p>Loading...</p>
     }
     else
     {
         <div>
-            <div class="catalog-items">
-                @foreach (var item in catalogResult.Data)
+            <div class="catalog-items" @ref="catalogItemsContainer">
+                @foreach (var item in catalogItems)
                 {
-                    <CatalogListItem Item="@item" />
+                    <eShop.WebAppComponents.Catalog.CatalogListItem Item="@item" />
                 }
             </div>
 
-            <div class="page-links">
-                @foreach (var pageIndex in GetVisiblePageIndexes(catalogResult))
-                {
-                    <NavLink ActiveClass="active-page" Match="@NavLinkMatch.All" href="@Nav.GetUriWithQueryParameter("page", pageIndex == 1 ? null : pageIndex)">@pageIndex</NavLink>
-                }
-            </div>
+            @if (isLoading)
+            {
+                <div class="loading-indicator">
+                    <p>Loading more items...</p>
+                </div>
+            }
+            
+            @if (hasMoreItems && !isLoading)
+            {
+                <div class="load-more-trigger" @ref="loadMoreTrigger">
+                    <div class="trigger-content">Scroll to load more...</div>
+                </div>
+                <div class="load-more-manual">
+                    <button class="btn btn-outline-secondary" @onclick="LoadMoreItems">Load More Items</button>
+                </div>
+            }
         </div>
     }
 </div>
 
 @code {
     const int PageSize = 9;
-
-    [SupplyParameterFromQuery]
-    public int? Page { get; set; }
+    
+    private List<CatalogItem> catalogItems = new();
+    private ElementReference catalogItemsContainer;
+    private ElementReference loadMoreTrigger;
+    private bool isLoading = false;
+    private bool hasMoreItems = true;
+    private int currentPage = 0;
+    private int totalItemCount = 0;
+    private DotNetObjectReference<Catalog>? dotNetRef;
+    private IJSObjectReference? intersectionObserver;
 
     [SupplyParameterFromQuery(Name = "brand")]
     public int? BrandId { get; set; }
@@ -46,17 +68,149 @@
     [SupplyParameterFromQuery(Name = "type")]
     public int? ItemTypeId { get; set; }
 
-    CatalogResult? catalogResult;
-
-    static IEnumerable<int> GetVisiblePageIndexes(CatalogResult result)
-        => Enumerable.Range(1, (int)Math.Ceiling(1.0 * result.Count / PageSize));
-
     protected override async Task OnInitializedAsync()
     {
-        catalogResult = await CatalogService.GetCatalogItems(
-            Page.GetValueOrDefault(1) - 1,
-            PageSize,
-            BrandId,
-            ItemTypeId);
+        dotNetRef = DotNetObjectReference.Create(this);
+        await LoadMoreItems();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+         Console.WriteLine($"OnAfterRenderAsync called - firstRender: {firstRender}, isLoading: {isLoading}, hasMoreItems: {hasMoreItems}, catalogItems.Count: {catalogItems.Count}");
+        if (firstRender)
+        {
+            return; // Don't setup on first render, wait for items to load
+        }
+        
+        // Setup intersection observer after items are loaded and rendered
+        if (hasMoreItems && !isLoading && catalogItems.Any() && loadMoreTrigger.Context != null)
+        {
+            await SetupIntersectionObserver();
+        }
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // Reset the list when filters change
+        catalogItems.Clear();
+        currentPage = 0;
+        hasMoreItems = true;
+        totalItemCount = 0;
+        
+        if (intersectionObserver != null)
+        {
+            await intersectionObserver.InvokeVoidAsync("disconnect");
+            intersectionObserver = null;
+        }
+        
+        await LoadMoreItems();
+    }
+
+    private async Task LoadMoreItems()
+    {
+        Console.WriteLine($"LoadMoreItems called - isLoading: {isLoading}, hasMoreItems: {hasMoreItems}");
+        
+        if (isLoading || !hasMoreItems) 
+        {
+            Console.WriteLine("Exiting LoadMoreItems early");
+            return;
+        }
+        
+        isLoading = true;
+        StateHasChanged();
+
+        try
+        {
+            Console.WriteLine($"Loading page {currentPage} with PageSize {PageSize}");
+            var result = await CatalogService.GetCatalogItems(
+                currentPage,
+                PageSize,
+                BrandId,
+                ItemTypeId);
+
+            if (result != null)
+            {
+                Console.WriteLine($"Loaded {result.Data.Count} items, total count: {result.Count}");
+                catalogItems.AddRange(result.Data);
+                totalItemCount = result.Count;
+                hasMoreItems = catalogItems.Count < totalItemCount;
+                currentPage++;
+                Console.WriteLine($"Updated state - catalogItems.Count: {catalogItems.Count}, hasMoreItems: {hasMoreItems}");
+            }
+            else
+            {
+                Console.WriteLine("Result is null");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading catalog items: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+            
+            // Setup intersection observer after state has changed and rendered
+            if (hasMoreItems && catalogItems.Any())
+            {
+                await Task.Delay(100); // Give time for render
+                await SetupIntersectionObserver();
+            }
+        }
+    }
+
+    private async Task SetupIntersectionObserver()
+    {
+        if (intersectionObserver != null)
+        {
+            Console.WriteLine("Observer already exists, disconnecting first");
+            await intersectionObserver.InvokeVoidAsync("disconnect");
+            intersectionObserver = null;
+        }
+        
+        if (loadMoreTrigger.Context == null) 
+        {
+            Console.WriteLine("LoadMoreTrigger context is null, cannot setup observer");
+            return;
+        }
+        
+        try
+        {
+            Console.WriteLine("Setting up intersection observer...");
+            var module = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/Pages/Catalog/Catalog.razor.js");
+            intersectionObserver = await module.InvokeAsync<IJSObjectReference>("setupIntersectionObserver", 
+                loadMoreTrigger, dotNetRef);
+            Console.WriteLine("Intersection observer setup complete");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error setting up intersection observer: {ex.Message}");
+        }
+    }
+
+    [JSInvokable]
+    public async Task OnIntersection()
+    {
+        Console.WriteLine("OnIntersection called from JavaScript");
+        if (!isLoading && hasMoreItems)
+        {
+            await LoadMoreItems();
+        }
+        else
+        {
+            Console.WriteLine($"Skipping load - isLoading: {isLoading}, hasMoreItems: {hasMoreItems}");
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (intersectionObserver != null)
+        {
+            await intersectionObserver.InvokeVoidAsync("disconnect");
+            await intersectionObserver.DisposeAsync();
+        }
+        
+        dotNetRef?.Dispose();
     }
 }
