@@ -1,4 +1,21 @@
 {
+  "mcp": {
+    "servers": {
+      "Context7": {
+        "type": "stdio",
+        "command": "npx",
+        "args": [
+          "-y",
+          "@upstash/context7-mcp@latest"
+        ]
+      }
+    },
+  },
+  "github.copilot.chat.codeGeneration.instructions": [      
+    {
+      "text": "When answering questions about frameworks, libraries, or APIs, use Context7 to retrieve current documentation rather than relying on training data.",      
+    }
+  ],
   "dotnet.defaultSolution": "eShop.Web.slnf",
   "github.copilot.nextEditSuggestions.enabled": true,
   "github.copilot.nextEditSuggestions.fixes": true
