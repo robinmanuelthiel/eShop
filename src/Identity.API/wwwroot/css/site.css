@@ -731,6 +731,7 @@ select::-ms-expand {
     text-align: center;
     font-weight: 900;
     font-size: 28px;
+    color: #E91E63;
 }
 
     .home-catalog-item-price::before {
@@ -818,7 +819,7 @@ form .col-md-4 {
 
 .cart-subtotal-value {
     font-size: 20px;
-    color: #00a69c;
+    color: #E91E63;
 }
 
 .cart-total-label {
@@ -829,7 +830,7 @@ form .col-md-4 {
 
 .cart-total-value {
     font-size: 28px;
-    color: #00a69c;
+    color: #E91E63;
     text-align: left;
 }
 
