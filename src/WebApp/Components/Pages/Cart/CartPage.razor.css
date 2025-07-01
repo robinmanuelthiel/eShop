@@ -63,11 +63,11 @@
 }
 
 .cart-items .cart-item .price {
-    color: #E91E63;
+    color: #D45D79;
 }
 
 .cart-items .cart-item .catalog-item-total {
-    color: #E91E63;
+    color: #D45D79;
     font-weight: 600;
 }
 
@@ -120,7 +120,7 @@
 }
 
 .cart-summary-total div:last-child {
-    color: #E91E63;
+    color: #D45D79;
     font-weight: 600;
 }
 
