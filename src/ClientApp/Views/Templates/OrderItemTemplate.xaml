@@ -20,6 +20,7 @@
                 <Setter Property="FontFamily" Value="Montserrat-Regular" />
                 <Setter Property="FontSize" Value="{StaticResource MidMediumSize}" />
                 <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="TextColor" Value="#E91E63" />
             </Style>
 
             <Style x:Key="OrderItemQuantityStyle" TargetType="{x:Type Label}">

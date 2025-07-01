@@ -28,7 +28,7 @@
     <Color x:Key="ThemeListViewBackgroundColor">Transparent</Color>
     <Color x:Key="ActivityIndicatorColor">#00857D</Color>
     <Color x:Key="HighlightColor">#ed361a</Color>
-    <Color x:Key="ImportantColor">#2556cb</Color>
+    <Color x:Key="ImportantColor">#E91E63</Color>
 
     <!--  Theme Colors  -->
     <Color x:Key="LightBackgroundColor">#FFFFFF</Color>
