@@ -161,3 +161,18 @@
         flex-direction: column-reverse;
     } 
 }
+
+.cart-items .cart-item .catalog-item-content .price {
+    color: #E91E63;
+    font-weight: 700;
+}
+
+.cart-items .cart-item .catalog-item-total {
+    color: #E91E63;
+    font-weight: 700;
+}
+
+.cart-summary-total div:last-child {
+    color: #E91E63;
+    font-weight: 700;
+}
