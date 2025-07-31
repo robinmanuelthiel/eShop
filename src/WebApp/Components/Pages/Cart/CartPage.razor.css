@@ -135,17 +135,17 @@
 
 /* Price styling for cart page */
 .cart .price {
-    color: #e91e63;
+    color: #ff99ff;
     font-weight: 600;
 }
 
 .cart-items .catalog-item-total {
-    color: #e91e63;
+    color: #ff99ff;
     font-weight: 600;
 }
 
 .cart-summary-total div:last-child {
-    color: #e91e63;
+    color: #ff99ff;
     font-weight: 600;
 }
 
