@@ -108,6 +108,8 @@
     justify-content: space-between;
     align-items: flex-start;
     align-self: stretch;
+    color: #FF6600;
+    font-weight: 600;
 }
 
 .cart-summary .cart-summary-link {
@@ -152,6 +154,10 @@
     .cart-items .cart-item .catalog-item-info {
         flex-basis: 100%;
     }
+}
+
+.catalog-item-content .price {
+    color: #FF6600;
 }
 
 @media only screen and (min-width: 481px) and (max-width: 1024px) { 

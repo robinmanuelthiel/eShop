@@ -29,6 +29,7 @@
     <Color x:Key="ActivityIndicatorColor">#00857D</Color>
     <Color x:Key="HighlightColor">#ed361a</Color>
     <Color x:Key="ImportantColor">#2556cb</Color>
+    <Color x:Key="PriceColor">#FF6600</Color>
 
     <!--  Theme Colors  -->
     <Color x:Key="LightBackgroundColor">#FFFFFF</Color>
