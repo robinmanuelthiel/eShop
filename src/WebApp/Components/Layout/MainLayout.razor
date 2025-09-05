@@ -1,5 +1,7 @@
 ﻿@using eShop.WebApp.Components.Chatbot
+@using eShop.WebApp.Services
 @inherits LayoutComponentBase
+@inject IThemeService ThemeService
 
 <HeaderBar />
 @Body
@@ -11,3 +13,13 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ThemeService.InitializeAsync();
+        }
+    }
+}

@@ -36,7 +36,7 @@
 }
 
 .eshop-header-intro h1 {
-    color: #000;
+    color: var(--color-header-text);
     font-size: 3.5rem;
     font-style: normal;
     font-weight: 700;
@@ -45,7 +45,7 @@
 }
 
 .eshop-header-intro p {
-    color: #000;
+    color: var(--color-header-text);
     font-size: 2rem;
     font-style: normal;
     font-weight: 700;
