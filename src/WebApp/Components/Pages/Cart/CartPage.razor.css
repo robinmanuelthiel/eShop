@@ -62,6 +62,12 @@
     max-width: 12rem;
 }
 
+.cart-items .cart-item .catalog-item-content .price,
+.cart-items .cart-item .catalog-item-total,
+.cart-summary-total div:last-child {
+    color: #007bff;
+}
+
 .cart-summary-container {
     display: flex;
     padding: 1rem 1.5rem;
