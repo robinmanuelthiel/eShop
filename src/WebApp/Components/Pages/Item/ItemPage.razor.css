@@ -4,6 +4,7 @@
     align-items: flex-start;
     gap: 4rem;
     line-height: 1.7rem;
+    color: var(--color-text);
 }
 
 p:first-of-type {
@@ -28,11 +29,12 @@ img {
 .price {
     font-size: 1.6rem;
     font-weight: 600;
+    color: var(--color-text);
 }
 
 .add-to-cart button {
-    background-color: black;
-    color: white;
+    background-color: var(--color-button-primary-bg);
+    color: var(--color-button-primary-text);
     border-radius: .25rem;
     border: 0;
     padding: 0.5rem 1.25rem;
@@ -40,18 +42,20 @@ img {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    transition: background-color 0.2s ease;
 }
 
 .add-to-cart button:hover {
-    background-color: #666;
+    background-color: var(--color-hover);
 }
 
     .add-to-cart button:active {
-        background-color: #333;
+        background-color: var(--color-button-primary-bg);
+        opacity: 0.8;
     }
 
 a {
-    color: black;
+    color: var(--color-text);
 }
 
 @media only screen and (max-width: 480px) { 
