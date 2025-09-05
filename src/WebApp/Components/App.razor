@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using eShop.WebApp.Services
+@inject ThemeService ThemeService
+@implements IDisposable
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,6 +11,10 @@
     <base href="/" />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/app.css" />
+    @if (ThemeService.CurrentTheme == "dark")
+    {
+        <link rel="stylesheet" href="css/app.dark.css" />
+    }
     <link rel="stylesheet" href="WebApp.styles.css" />
     <link rel="shortcut icon" href="images/favicon.png" />
     <HeadOutlet />
@@ -18,3 +26,15 @@
 </body>
 
 </html>
+
+@code {
+    protected override void OnInitialized()
+    {
+        ThemeService.OnThemeChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        ThemeService.OnThemeChanged -= StateHasChanged;
+    }
+}

@@ -1,3 +1,6 @@
+﻿@using eShop.WebApp.Services
+@inject ThemeService ThemeService
+
 ﻿@using Microsoft.AspNetCore.Components.Endpoints
 
 <div class="eshop-header @(IsCatalog? "home" : "")">
@@ -15,6 +18,11 @@
             
             <UserMenu />
             <CartMenu />
+            <div class="theme-selector">
+                <button class="theme-selector-button" @onclick="ToggleTheme">
+                    <img alt="Theme" src="images/theme.svg" />
+                </button>
+            </div>
         </nav>
         <div class="eshop-header-intro">
             <h1><SectionOutlet SectionName="page-header-title" /></h1>
@@ -30,4 +38,9 @@
     // We can use Endpoint Metadata to determine the page currently being visited
     private Type? PageComponentType => HttpContext?.GetEndpoint()?.Metadata.OfType<ComponentTypeMetadata>().FirstOrDefault()?.Type;
     private bool IsCatalog => PageComponentType == typeof(Pages.Catalog.Catalog);
+
+    private void ToggleTheme()
+    {
+        ThemeService.ToggleTheme();
+    }
 }
