@@ -11,10 +11,6 @@
     <base href="/" />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/app.css" />
-    @if (ThemeService.CurrentTheme == "dark")
-    {
-        <link rel="stylesheet" href="css/app.dark.css" />
-    }
     <link rel="stylesheet" href="WebApp.styles.css" />
     <link rel="shortcut icon" href="images/favicon.png" />
     <HeadOutlet />
@@ -23,6 +19,7 @@
 <body>
     <Routes />
     <script src="_framework/blazor.web.js"></script>
+    <script src="js/theme.js"></script>
 </body>
 
 </html>

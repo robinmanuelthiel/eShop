@@ -39,8 +39,8 @@
     private Type? PageComponentType => HttpContext?.GetEndpoint()?.Metadata.OfType<ComponentTypeMetadata>().FirstOrDefault()?.Type;
     private bool IsCatalog => PageComponentType == typeof(Pages.Catalog.Catalog);
 
-    private void ToggleTheme()
+    private async Task ToggleTheme()
     {
-        ThemeService.ToggleTheme();
+        await ThemeService.ToggleTheme();
     }
 }
