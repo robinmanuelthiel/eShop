@@ -19,6 +19,18 @@ public class BasketItem : IValidatableObject
             results.Add(new ValidationResult("Invalid number of units", new[] { "Quantity" }));
         }
 
+        // New validation for Id
+        if (string.IsNullOrWhiteSpace(Id))
+        {
+            results.Add(new ValidationResult("Id must not be empty", new[] { "Id" }));
+        }
+
+        // New validation for Id
+        if (string.IsNullOrWhiteSpace(ProductId.ToString()))
+        {
+            results.Add(new ValidationResult("Quantity must not be empty", new[] { "ProductId" }));
+        }
+
         return results;
     }
 }
