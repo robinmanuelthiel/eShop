@@ -29,6 +29,7 @@ public static class MauiProgram
 
         builder.Services.AddHttpClient<CatalogService>(o => o.BaseAddress = new(MobileBffHost));
         builder.Services.AddSingleton<WebAppComponents.Services.IProductImageUrlProvider, ProductImageUrlProvider>();
+        builder.Services.AddScoped<eShop.WebAppComponents.Services.ICodespaceUrlHelper, eShop.WebAppComponents.Services.CodespaceUrlHelper>();
 
         return builder.Build();
     }

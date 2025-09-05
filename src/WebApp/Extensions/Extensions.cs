@@ -25,6 +25,7 @@ public static class Extensions
         builder.Services.AddSingleton<BasketService>();
         builder.Services.AddSingleton<OrderStatusNotificationService>();
         builder.Services.AddSingleton<IProductImageUrlProvider, ProductImageUrlProvider>();
+        builder.Services.AddScoped<eShop.WebAppComponents.Services.ICodespaceUrlHelper, eShop.WebAppComponents.Services.CodespaceUrlHelper>();
         builder.AddAIServices();
 
         // HTTP and GRPC client registrations
