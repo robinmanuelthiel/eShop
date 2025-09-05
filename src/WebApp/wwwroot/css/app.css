@@ -289,3 +289,16 @@ h1:focus {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+html.dark {
+    filter: invert(1) hue-rotate(180deg);
+    background-color: #121212;
+    color-scheme: dark;
+}
+
+html.dark img,
+html.dark video,
+html.dark picture,
+html.dark svg,
+html.dark iframe {
+    filter: invert(1) hue-rotate(180deg);
+}
