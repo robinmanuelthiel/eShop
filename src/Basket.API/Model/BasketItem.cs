@@ -19,6 +19,11 @@ public class BasketItem : IValidatableObject
             results.Add(new ValidationResult("Invalid number of units", new[] { "Quantity" }));
         }
 
+        if (UnitPrice < 0)
+        {
+            results.Add(new ValidationResult("Unit price must be greater than or equal to zero", new[] { "UnitPrice" }));
+        }
+
         return results;
     }
 }
