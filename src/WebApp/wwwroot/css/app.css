@@ -157,7 +157,7 @@
     font-family: 'Open Sans';
     font-style: italic;
     font-weight: 400;
-    src: url('../fonts/open-sans-v36-latin-italic.woff2') format('woff2');
+    src: url('../fonts/open-san-v36-latin-italic.woff2') format('woff2');
 }
 
 /* open-sans-500 - latin */
@@ -289,3 +289,39 @@ h1:focus {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+body.dark {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+body.dark .button.button-primary {
+    background: #FFF;
+    color: #000;
+}
+
+body.dark .button.button.button-secondary {
+    border: 1px solid #FFF;
+    background: #121212;
+    color: #FFF;
+}
+
+body.dark .catalog-item .catalog-name {
+    color: #ffffff;
+}
+
+
+.theme-selector {
+    margin-left: 1rem;
+}
+
+.theme-selector-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.theme-selector-button img {
+    width: 24px;
+    height: 24px;
+}
