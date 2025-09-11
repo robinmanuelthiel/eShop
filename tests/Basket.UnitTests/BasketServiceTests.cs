@@ -59,4 +59,39 @@ public class BasketServiceTests
         Assert.IsInstanceOfType<CustomerBasketResponse>(response);
         Assert.AreEqual(response.Items.Count(), 0);
     }
+
+    [TestMethod]
+    public async Task UpdateBasketThrowsExceptionWhenExceedingMaxItems()
+    {
+        var mockRepository = Substitute.For<IBasketRepository>();
+        var service = new BasketService(mockRepository, NullLogger<BasketService>.Instance);
+        var serverCallContext = TestServerCallContext.Create();
+        var httpContext = new DefaultHttpContext();
+        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity([new Claim("sub", "1")]));
+        serverCallContext.SetUserState("__HttpContext", httpContext);
+
+        var request = new UpdateBasketRequest();
+        for (int i = 0; i < 21; i++)
+        {
+            request.Items.Add(new eShop.Basket.API.Grpc.BasketItem { ProductId = i, Quantity = 1 });
+        }
+
+        await Assert.ThrowsExceptionAsync<RpcException>(() => service.UpdateBasket(request, serverCallContext));
+    }
+
+    [TestMethod]
+    public async Task UpdateBasketThrowsExceptionWhenExceedingMaxQuantityPerItem()
+    {
+        var mockRepository = Substitute.For<IBasketRepository>();
+        var service = new BasketService(mockRepository, NullLogger<BasketService>.Instance);
+        var serverCallContext = TestServerCallContext.Create();
+        var httpContext = new DefaultHttpContext();
+        httpContext.User = new ClaimsPrincipal(new ClaimsIdentity([new Claim("sub", "1")]));
+        serverCallContext.SetUserState("__HttpContext", httpContext);
+
+        var request = new UpdateBasketRequest();
+        request.Items.Add(new eShop.Basket.API.Grpc.BasketItem { ProductId = 1, Quantity = 101 });
+
+        await Assert.ThrowsExceptionAsync<RpcException>(() => service.UpdateBasket(request, serverCallContext));
+    }
 }

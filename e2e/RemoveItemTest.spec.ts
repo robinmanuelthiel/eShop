@@ -19,3 +19,22 @@ test('Remove item from cart', async ({ page }) => {
 
   await expect(page.getByText('Your shopping bag is empty')).toBeVisible();
 });
+
+test('Remove items when limits are enforced', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: 'Ready for a new adventure?' })).toBeVisible();
+
+  for (let i = 0; i < 20; i++) {
+    await page.getByRole('link', { name: `Item ${i}` }).click();
+    await page.getByRole('button', { name: 'Add to shopping bag' }).click();
+    await page.goto('/');
+  }
+
+  await page.getByRole('link', { name: 'shopping bag' }).click();
+  await expect(page.getByRole('heading', { name: 'Shopping bag' })).toBeVisible();
+
+  await page.getByLabel('product quantity').nth(0).fill('0');
+  await page.getByRole('button', { name: 'Update' }).click();
+
+  await expect(page.getByText('Basket cannot have more than 20 different items')).toBeVisible();
+});
