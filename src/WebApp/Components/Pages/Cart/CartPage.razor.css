@@ -133,6 +133,22 @@
     margin-left: auto;
 }
 
+/* Price styling for cart page */
+.cart .price {
+    color: #ff99ff;
+    font-weight: 600;
+}
+
+.cart-items .catalog-item-total {
+    color: #ff99ff;
+    font-weight: 600;
+}
+
+.cart-summary-total div:last-child {
+    color: #ff99ff;
+    font-weight: 600;
+}
+
 @media only screen and (max-width: 480px) { 
     .cart {
         padding: 0 1rem;
