@@ -1,5 +1,6 @@
 ﻿@inject eShop.HybridApp.Services.CatalogService CatalogService
 @inject NavigationManager Nav
+@inject eShop.WebAppComponents.Services.ICodespaceUrlHelper CodespaceUrlHelper
 
 @if (catalogBrands is not null && catalogItemTypes is not null)
 {
@@ -61,13 +62,13 @@
         catalogItemTypes = itemTypesTask.Result;
     }
 
-    private string BrandUri(int? brandId) => Nav.GetUriWithQueryParameters(new Dictionary<string, object?>()
+    private string BrandUri(int? brandId) => CodespaceUrlHelper.GetUriWithQueryParameters(Nav.Uri, new Dictionary<string, object?>()
     {
         { "page", null },
         { "brand", brandId },
     });
 
-    private string TypeUri(int? typeId) => Nav.GetUriWithQueryParameters(new Dictionary<string, object?>()
+    private string TypeUri(int? typeId) => CodespaceUrlHelper.GetUriWithQueryParameters(Nav.Uri, new Dictionary<string, object?>()
     {
         { "page", null },
         { "type", typeId },
