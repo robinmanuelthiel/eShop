@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using eShop.Basket.API.Repositories;
 using eShop.Basket.API.Extensions;
 using eShop.Basket.API.Model;
+using eShop.Basket.API.Repositories;
 
 namespace eShop.Basket.API.Grpc;
 
@@ -103,6 +103,7 @@ public class BasketService(
             {
                 ProductId = item.ProductId,
                 Quantity = item.Quantity,
+                PictureUrl = "https://mypic.png"
             });
         }
 
