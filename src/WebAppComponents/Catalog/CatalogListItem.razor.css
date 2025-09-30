@@ -20,6 +20,13 @@
 
 .catalog-product-image img {
     max-width: 100%;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease;
+}
+
+.catalog-product-image img:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
 .catalog-product .catalog-product-content {
