@@ -27,7 +27,8 @@ img {
 
 .price {
     font-size: 1.6rem;
-    font-weight: 600;
+    font-weight: bold;
+    color: #39FF14;
 }
 
 .add-to-cart button {

@@ -110,6 +110,13 @@
     align-self: stretch;
 }
 
+.cart-summary-total div:last-child,
+.catalog-item-total,
+.price {
+    color: #39FF14;
+    font-weight: bold;
+}
+
 .cart-summary .cart-summary-link {
     display: flex;
     align-items: center;
