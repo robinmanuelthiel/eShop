@@ -111,6 +111,14 @@
     }
 }
 
+.theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: inherit;
+}
+
 @media only screen and (min-width: 481px) and (max-width: 1024px) { 
     .eshop-header.home .eshop-header-hero {
         height: 24rem;
@@ -148,4 +156,11 @@
     .eshop-header-intro p {
         font-size: 1.5rem;
     }
+}
+.theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.25rem;
+    color: inherit;
 }

@@ -9,11 +9,20 @@
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="WebApp.styles.css" />
     <link rel="shortcut icon" href="images/favicon.png" />
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+        })();
+    </script>
     <HeadOutlet />
 </head>
 
 <body>
     <Routes />
+    <script src="js/theme.js"></script>
     <script src="_framework/blazor.web.js"></script>
 </body>
 
