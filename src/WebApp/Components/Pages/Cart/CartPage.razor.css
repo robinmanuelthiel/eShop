@@ -38,6 +38,11 @@
     flex-basis: 60%;
 }
 
+.cart-items .cart-item .price {
+    color: #C2185B;
+    font-weight: 700;
+}
+
 .cart-items .cart-item-header .catalog-item-info {
     flex-basis: 60%;
 }
