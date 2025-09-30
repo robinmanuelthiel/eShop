@@ -10,9 +10,16 @@ p:first-of-type {
     margin-top: 0;
 }
 
-img {
+.item-details img {
     width: 25rem;
     max-width: 50%;
+    border-radius: 0.75rem;
+    box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease;
+}
+
+.item-details img:hover {
+    box-shadow: 0 1.25rem 3rem rgba(0, 0, 0, 0.18);
 }
 
 .description {
