@@ -51,7 +51,7 @@
                             </button>
                         </form>
                     </div>
-                    <div class="catalog-item-total">
+                    <div class="catalog-item-total price">
                         $@((item.UnitPrice * quantity).ToString("0.00"))
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                 </div>
                 <div class="cart-summary-total">
                     <div>Total</div>
-                    <div>$@TotalPrice?.ToString("0.00")</div>
+                    <div class="price">$@TotalPrice?.ToString("0.00")</div>
                 </div>
                 <a href="checkout" class="button button-primary">Check out</a>
                 <a href="" class="cart-summary-link">

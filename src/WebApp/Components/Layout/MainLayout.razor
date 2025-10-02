@@ -1,13 +1,30 @@
 ﻿@using eShop.WebApp.Components.Chatbot
+@using eShop.WebApp.Services
 @inherits LayoutComponentBase
+@inject PinkPricesState PinkPricesState
+@implements IDisposable
 
-<HeaderBar />
-@Body
-<ShowChatbotButton />
-<FooterBar />
+<div class="@(PinkPricesState.IsPinkPricesEnabled ? "pink-prices-mode" : "")">
+    <HeaderBar />
+    @Body
+    <ShowChatbotButton />
+    <FooterBar />
+</div>
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        PinkPricesState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        PinkPricesState.OnChange -= StateHasChanged;
+    }
+}
