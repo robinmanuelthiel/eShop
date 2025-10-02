@@ -3,6 +3,7 @@
 @inject CatalogService CatalogService
 @inject BasketState BasketState
 @inject NavigationManager Nav
+@inject IJSRuntime JS
 @inject IProductImageUrlProvider ProductImages
 
 @if (item is not null)
@@ -99,6 +100,7 @@ else if (notFound)
         {
             await BasketState.AddAsync(item);
             await UpdateNumInCartAsync();
+            await TriggerConfettiAsync();
         }
     }
 
@@ -106,5 +108,17 @@ else if (notFound)
     {
         var items = await BasketState.GetBasketItemsAsync();
         numInCart = items.FirstOrDefault(row => row.ProductId == ItemId)?.Quantity ?? 0;
+    }
+
+    private async Task TriggerConfettiAsync()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("eshopConfetti.launch");
+        }
+        catch (JSDisconnectedException)
+        {
+            // If the connection has been interrupted, there's nowhere to display confetti.
+        }
     }
 }
