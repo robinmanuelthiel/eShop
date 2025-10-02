@@ -1,9 +1,10 @@
-﻿@page "/item/{itemId:int}"
+@page "/item/{itemId:int}"
 @using System.Net
 @inject CatalogService CatalogService
 @inject BasketState BasketState
 @inject NavigationManager Nav
 @inject IProductImageUrlProvider ProductImages
+@inject IJSRuntime JSRuntime
 
 @if (item is not null)
 {
@@ -99,6 +100,7 @@ else if (notFound)
         {
             await BasketState.AddAsync(item);
             await UpdateNumInCartAsync();
+            await JSRuntime.InvokeVoidAsync("fireConfetti");
         }
     }
 
