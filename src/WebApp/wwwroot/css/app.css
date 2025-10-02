@@ -289,3 +289,8 @@ h1:focus {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+/* Pink Prices Mode */
+.pink-prices-mode .price {
+    color: pink !important;
+}

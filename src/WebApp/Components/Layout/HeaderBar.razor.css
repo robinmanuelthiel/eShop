@@ -71,6 +71,26 @@
     gap: 1.5rem;
 }
 
+.pink-prices-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.pink-prices-toggle label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.pink-prices-toggle input[type="checkbox"] {
+    cursor: pointer;
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
 @media only screen and (max-width: 480px) { 
     .eshop-header-hero {
         height: 18rem;
