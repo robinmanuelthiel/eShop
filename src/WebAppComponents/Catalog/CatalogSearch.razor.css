@@ -106,3 +106,88 @@
     justify-content: space-between;
   }
 }
+
+
+/* Styles for the price inputs and action buttons in CatalogSearch */
+
+.catalog-search-price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+    .catalog-search-price input[type="number"] {
+        width: 6.25rem;
+        padding: 0.45rem 0.5rem;
+        border-radius: 0.4rem;
+        border: 1px solid #d1d5db; /* neutral gray */
+        background: #ffffff;
+        box-sizing: border-box;
+        font-size: 0.95rem;
+        -moz-appearance: textfield;
+    }
+
+    .catalog-search-price span {
+        color: #6b7280;
+        margin: 0 0.25rem;
+    }
+
+/* Button container */
+.catalog-search-price-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+/* Base button */
+.button {
+    padding: 0.45rem 0.8rem;
+    border-radius: 0.45rem;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    color: #111827;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.92rem;
+    transition: background-color 0.12s ease, transform 0.06s ease, box-shadow 0.12s;
+    box-shadow: 0 1px 0 rgba(16,24,40,0.02);
+}
+
+    /* Primary button */
+    .button.button-primary {
+        background: linear-gradient(180deg,#2563eb,#0b5fff);
+        color: #fff;
+        border: 1px solid rgba(11,95,255,0.9);
+        box-shadow: 0 6px 14px rgba(11,95,255,0.12);
+    }
+
+    .button:hover {
+        background: #f3f4f6;
+    }
+
+    .button.button-primary:hover {
+        transform: translateY(-1px);
+        filter: brightness(0.98);
+    }
+
+    .button:active {
+        transform: translateY(1px);
+    }
+
+    .button[disabled] {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+/* Small screens adjust */
+@media (max-width: 520px) {
+    .catalog-search-price {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .catalog-search-price-actions {
+        margin-left: 0;
+    }
+}

@@ -10,9 +10,13 @@ p:first-of-type {
     margin-top: 0;
 }
 
-img {
+/* Scope the rule to the item-details image so we only affect the product detail image */
+.item-details img {
     width: 25rem;
     max-width: 50%;
+    border-radius: 0.75rem; /* rounded corners */
+    object-fit: cover;
+    display: block;
 }
 
 .description {
@@ -64,6 +68,8 @@ a {
     .item-details img {
         width: 100%;
         max-width: none;
+        /* keep rounded corners on small screens */
+        border-radius: 0.75rem;
     }
 }
 
