@@ -21,7 +21,7 @@ public class BasketItem : IValidatableObject
 
         if (string.IsNullOrEmpty(ProductName))
         {
-            results.Add(new ValidationResult("Wir brauchen immer einen Produktnamen!", new[] { "ProductName" }));
+            results.Add(new ValidationResult("Product name is required", new[] { "ProductName" }));
         }
 
         return results;
