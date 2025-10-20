@@ -16,7 +16,7 @@ public class BasketItem : IValidatableObject
 
         if (Quantity < 1 || Quantity > 100)
         {
-            results.Add(new ValidationResult("Invalid number of units", new[] { "Quantity" }));
+            results.Add(new ValidationResult("Quantity must be between 1 and 100 units", new[] { "Quantity" }));
         }
 
         if (string.IsNullOrEmpty(ProductName))
