@@ -1,5 +1,8 @@
 ﻿namespace Webhooks.API.Extensions;
 
+using FluentValidation;
+using Webhooks.API.Model;
+
 public static class RouteHandlerBuilderExtensions
 {
     public static RouteHandlerBuilder ValidateWebhookSubscriptionRequest(this RouteHandlerBuilder routeHandlerBuilder)
@@ -13,11 +16,21 @@ public static class RouteHandlerBuilderExtensions
                 return TypedResults.BadRequest("No WebhookSubscriptionRequest found.");
             }
 
-            var validationResults = webhookSubscriptionRequest.Validate(new ValidationContext(webhookSubscriptionRequest));
-
-            if (validationResults.Any())
+            var validator = context.HttpContext.RequestServices.GetService(typeof(IValidator<WebhookSubscriptionRequest>)) as IValidator<WebhookSubscriptionRequest>;
+            if (validator == null)
             {
-                return TypedResults.ValidationProblem(validationResults.ToErrors());
+                // No validator registered - continue without validation
+                return await next(context);
+            }
+
+            var validationResult = await validator.ValidateAsync(webhookSubscriptionRequest);
+            if (!validationResult.IsValid)
+            {
+                var errors = validationResult.Errors
+                    .GroupBy(e => string.IsNullOrWhiteSpace(e.PropertyName) ? string.Empty : e.PropertyName)
+                    .ToDictionary(g => g.Key, g => g.Select(x => x.ErrorMessage).ToArray());
+
+                return TypedResults.ValidationProblem(errors);
             }
 
             return await next(context);

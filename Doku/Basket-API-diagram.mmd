@@ -1,0 +1,28 @@
+flowchart LR
+  Client[Client / WebApp / Mobile]
+  API[Basket API]
+  Catalog[Catalog API]
+  Order[Order API]
+  EventBus[Event Bus]
+  DB[(Basket DB)]
+
+  Client -->|REST JSON| API
+  API -->|GET product details| Catalog
+  API -->|Persist basket| DB
+  API -->|Publish event| EventBus
+  API -->|Create Order| Order
+
+  subgraph internal
+    DB
+    Catalog
+  end
+
+%% Alternative: Sequence for add item
+
+%%sequenceDiagram
+%%  participant C as Client
+%%  participant A as Basket API
+%%  participant D as DB
+%%  C->>A: PUT /api/v1/basket/items
+%%  A->>D: save/merge item
+%%  A-->>C: 200 OK
