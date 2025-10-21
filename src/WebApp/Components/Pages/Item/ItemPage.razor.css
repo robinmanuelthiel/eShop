@@ -25,9 +25,11 @@ img {
     gap: 1.2rem;
 }
 
-.price {
-    font-size: 1.6rem;
-    font-weight: 600;
+.price,
+span.price {
+    font-size: 1.6rem !important;
+    font-weight: 600 !important;
+    color: #059669 !important;
 }
 
 .add-to-cart button {

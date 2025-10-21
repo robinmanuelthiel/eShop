@@ -374,6 +374,7 @@ textarea {
     min-width: 140px;
     border-color: #37c7ca;
     max-height: 43px;
+    appearance: none;
     -webkit-appearance: none;
 }
 
@@ -731,6 +732,7 @@ select::-ms-expand {
     text-align: center;
     font-weight: 900;
     font-size: 28px;
+    color: #2A9E01;
 }
 
     .home-catalog-item-price::before {
@@ -926,11 +928,7 @@ form .col-md-4 {
     width: 102%;
 }
 
-.order-detail-button {
-    
-}
-
-    .order-detail-button a {
+.order-detail-button a {
         color: #83d01b;
     }
 
@@ -1133,4 +1131,9 @@ form .col-md-4 {
         padding-right: 0px;
         padding-left: 0px;
     }
+}
+
+/* Force price color site-wide for identity pages */
+.price, span.price, .home-catalog-item-price, .cart-total-value, .cart-subtotal-value {
+    color: #059669 !important;
 }

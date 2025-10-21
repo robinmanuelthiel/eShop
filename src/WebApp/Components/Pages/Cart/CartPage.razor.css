@@ -110,8 +110,11 @@
     align-self: stretch;
 }
 
-.cart-summary .cart-summary-link {
-    display: flex;
+.cart-summary-total div {
+    color: #059669 !important;
+    font-weight: 600;
+}
+
     align-items: center;
     gap: 0.5rem;
     color: #000;

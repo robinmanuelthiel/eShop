@@ -182,3 +182,8 @@ h1:focus {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+/* Ensure price color overrides component styles */
+.price, span.price, .catalog-product-content .price {
+    color: #059669 !important;
+}
