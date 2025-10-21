@@ -13,6 +13,7 @@ p:first-of-type {
 img {
     width: 25rem;
     max-width: 50%;
+    border-radius: 0.5rem;
 }
 
 .description {
