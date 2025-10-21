@@ -1,7 +1,16 @@
 ﻿namespace eShop.Basket.API.Model;
 
 public class BasketItem : IValidatableObject
+/// <summary>
+/// Represents an item in a shopping basket containing product information, pricing, and quantity details.
+/// Implements IValidatableObject to provide custom validation logic for basket item properties.
+/// </summary>
+/// <remarks>
+/// This class is used to store individual product items within a customer's shopping basket,
+/// including current and previous pricing information for comparison purposes.
+/// </remarks>
 {
+
     public string Id { get; set; }
     public int ProductId { get; set; }
     public string ProductName { get; set; }
