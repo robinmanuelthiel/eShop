@@ -90,7 +90,7 @@
                     <Label
                         Grid.Row="2"
                         FontSize="{StaticResource MediumSize}"
-                        Text="Start the season with the latest in clothing and equipment." />
+                        Text="Entdecke die Möglichkeiten von Generative AI für deine Ausbildung." />
                 </Grid>
             </CollectionView.Header>
             <CollectionView.EmptyView>

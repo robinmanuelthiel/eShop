@@ -1,4 +1,9 @@
-﻿using System.Text.Json.Serialization;
+﻿/// <summary>
+/// Provides a Redis-based implementation of the <see cref="IBasketRepository"/> interface for managing customer baskets.
+/// Handles CRUD operations for baskets using Redis as the backing store, leveraging efficient key prefixes and source-generated JSON serialization.
+/// </summary>
+
+using System.Text.Json.Serialization;
 using eShop.Basket.API.Model;
 
 namespace eShop.Basket.API.Repositories;

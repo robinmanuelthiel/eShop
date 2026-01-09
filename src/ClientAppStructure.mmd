@@ -1,0 +1,79 @@
+%% filepath: /workspaces/eShopDemo/ClientAppStructure.mmd
+classDiagram
+    direction LR
+
+    class App {
+        +App()
+        +OnStart()
+        +OnSleep()
+        +OnResume()
+    }
+
+    class AppShell {
+        +AppShell()
+        +InitializeRouting()
+    }
+
+    class MainViewModel
+    class LoginViewModel
+    class BasketViewModel
+    class CatalogViewModel
+    class CatalogItemViewModel
+    class MapViewModel
+    class ProfileViewModel
+    class CheckoutViewModel
+    class OrderDetailViewModel
+    class SettingsViewModel
+
+    class CatalogView
+    class BasketView
+    class CatalogItemView
+    class MapView
+    class ProfileView
+    class CheckoutView
+    class OrderDetailView
+    class SettingsView
+    class LoginView
+    class FiltersView
+
+    class INavigationService
+    class ISettingsService
+    class IAppEnvironmentService
+    class ILocationService
+    class ITheme
+    class IBasketService
+    class ICatalogService
+    class IOrderService
+    class IIdentityService
+
+    App --> AppShell
+    AppShell --> "1" INavigationService
+
+    CatalogView --> CatalogViewModel
+    BasketView --> BasketViewModel
+    CatalogItemView --> CatalogItemViewModel
+    MapView --> MapViewModel
+    ProfileView --> ProfileViewModel
+    CheckoutView --> CheckoutViewModel
+    OrderDetailView --> OrderDetailViewModel
+    SettingsView --> SettingsViewModel
+    LoginView --> LoginViewModel
+    FiltersView --> CatalogViewModel
+
+    MainViewModel --> INavigationService
+    MainViewModel --> ISettingsService
+    MainViewModel --> IAppEnvironmentService
+    MainViewModel --> ILocationService
+    MainViewModel --> ITheme
+
+    BasketViewModel --> IBasketService
+    CatalogViewModel --> ICatalogService
+    OrderDetailViewModel --> IOrderService
+    ProfileViewModel --> IIdentityService
+
+    IAppEnvironmentService <..> IBasketService
+    IAppEnvironmentService <..> ICatalogService
+    IAppEnvironmentService <..> IOrderService
+    IAppEnvironmentService <..> IIdentityService
+
+    %% Add more as needed for detail

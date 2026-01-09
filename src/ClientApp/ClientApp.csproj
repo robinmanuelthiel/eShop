@@ -23,7 +23,7 @@
     <NoWarn>$(NoWarn);XC0103</NoWarn>
 
     <!-- Display name -->
-    <ApplicationTitle>AdventureWorks</ApplicationTitle>
+    <ApplicationTitle>Generative AI Demo</ApplicationTitle>
 
     <!-- App Identifier -->
     <ApplicationId>com.companyname.eshop</ApplicationId>
