@@ -16,7 +16,13 @@ public class BasketItem : IValidatableObject
 
         if (Quantity < 1)
         {
-            results.Add(new ValidationResult("Invalid number of units", new[] { "Quantity" }));
+            results.Add(new ValidationResult("🤌 Numero di unità non valido", new[] { "Quantity" }));
+        }
+
+        // Validate the URL if it's a valid URL format
+        if (!string.IsNullOrEmpty(PictureUrl) && !Uri.IsWellFormedUriString(PictureUrl, UriKind.Absolute))
+        {
+            results.Add(new ValidationResult("🤌 Formato URL non valido", new[] { "PictureUrl" }));
         }
 
         return results;
